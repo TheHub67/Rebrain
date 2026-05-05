@@ -1,4 +1,3 @@
-cat > /mnt/user-data/outputs/icfes_prep.html << 'HTMLEOF'
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -9,1163 +8,248 @@ cat > /mnt/user-data/outputs/icfes_prep.html << 'HTMLEOF'
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
 <style>
-/* ===== RESET & BASE ===== */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-:root {
-  --bg: #080C14;
-  --bg2: #0D1220;
-  --bg3: #121826;
-  --surface: #161D2E;
-  --surface2: #1C2438;
-  --border: rgba(255,255,255,0.07);
-  --border2: rgba(255,255,255,0.12);
-  --text: #F0F4FF;
-  --text2: #8892A4;
-  --text3: #4A5568;
-  --cyan: #00E5FF;
-  --cyan2: #00B8CC;
-  --cyan-glow: rgba(0,229,255,0.15);
-  --pink: #FF3CAC;
-  --pink2: #CC2F8A;
-  --pink-glow: rgba(255,60,172,0.15);
-  --amber: #FFB800;
-  --amber2: #CC9300;
-  --amber-glow: rgba(255,184,0,0.15);
-  --green: #00FF87;
-  --green2: #00CC6A;
-  --green-glow: rgba(0,255,135,0.15);
-  --purple: #7B61FF;
-  --purple2: #5A44CC;
-  --purple-glow: rgba(123,97,255,0.15);
-  --red: #FF4757;
-  --font-display: 'Syne', sans-serif;
-  --font-body: 'DM Sans', sans-serif;
-  --r-sm: 8px;
-  --r-md: 12px;
-  --r-lg: 18px;
-  --r-xl: 24px;
-  --r-full: 999px;
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#080C14;--bg2:#0D1220;--bg3:#121826;--surface:#161D2E;--surface2:#1C2438;
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.12);
+  --text:#F0F4FF;--text2:#8892A4;--text3:#4A5568;
+  --cyan:#00E5FF;--cyan2:#00B8CC;--cyan-glow:rgba(0,229,255,0.15);
+  --pink:#FF3CAC;--pink2:#CC2F8A;--pink-glow:rgba(255,60,172,0.15);
+  --amber:#FFB800;--amber2:#CC9300;--amber-glow:rgba(255,184,0,0.15);
+  --green:#00FF87;--green2:#00CC6A;--green-glow:rgba(0,255,135,0.15);
+  --purple:#7B61FF;--purple2:#5A44CC;--purple-glow:rgba(123,97,255,0.15);
+  --red:#FF4757;
+  --font-display:'Syne',sans-serif;--font-body:'DM Sans',sans-serif;
+  --r-sm:8px;--r-md:12px;--r-lg:18px;--r-xl:24px;--r-full:999px;
+}
+html{scroll-behavior:smooth;}
+body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:0.4;}
+body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,229,255,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,255,0.025) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;z-index:0;}
+.orb{position:fixed;border-radius:50%;filter:blur(80px);pointer-events:none;z-index:0;animation:orbFloat 8s ease-in-out infinite;}
+.orb-1{width:500px;height:500px;background:rgba(0,229,255,0.06);top:-150px;right:-100px;}
+.orb-2{width:400px;height:400px;background:rgba(255,60,172,0.05);bottom:-100px;left:-100px;animation-delay:3s;}
+.orb-3{width:300px;height:300px;background:rgba(123,97,255,0.06);top:40%;left:30%;animation-delay:6s;}
+@keyframes orbFloat{0%,100%{transform:translate(0,0) scale(1);}33%{transform:translate(20px,-30px) scale(1.05);}66%{transform:translate(-15px,20px) scale(0.95);}}
+#app{position:relative;z-index:1;min-height:100vh;}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 24px;height:64px;display:flex;align-items:center;justify-content:space-between;background:rgba(8,12,20,0.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
+.nav-logo{font-family:var(--font-display);font-size:22px;font-weight:800;letter-spacing:-0.5px;display:flex;align-items:center;gap:6px;}
+.nav-logo .logo-icon{width:32px;height:32px;background:linear-gradient(135deg,var(--cyan),var(--purple));border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;font-size:16px;}
+.nav-logo span{color:var(--cyan);}
+.nav-links{display:flex;gap:4px;}
+.nav-link{padding:8px 16px;border-radius:var(--r-full);font-size:14px;font-weight:500;color:var(--text2);cursor:pointer;transition:all 0.2s;border:none;background:transparent;font-family:var(--font-body);}
+.nav-link:hover{color:var(--text);background:var(--surface);}
+.nav-link.active{color:var(--cyan);background:rgba(0,229,255,0.1);}
+.nav-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:var(--r-full);font-size:13px;font-weight:500;background:rgba(0,229,255,0.08);border:1px solid rgba(0,229,255,0.2);color:var(--cyan);}
+.nav-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--cyan);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.5;transform:scale(0.8);}}
+.screen{display:none;padding-top:64px;min-height:100vh;}
+.screen.active{display:block;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+.hero-section{padding:80px 24px 60px;max-width:900px;margin:0 auto;text-align:center;}
+.hero-chip{display:inline-flex;align-items:center;gap:8px;padding:8px 18px;border-radius:var(--r-full);background:rgba(0,229,255,0.08);border:1px solid rgba(0,229,255,0.2);font-size:13px;font-weight:500;color:var(--cyan);margin-bottom:32px;animation:fadeUp 0.6s ease both;}
+.hero-chip::before{content:'⚡';}
+.hero-title{font-family:var(--font-display);font-size:clamp(38px,7vw,72px);font-weight:800;line-height:1.05;letter-spacing:-2px;margin-bottom:24px;animation:fadeUp 0.6s ease 0.1s both;}
+.hero-title .line2{display:block;}
+.grad-cyan{background:linear-gradient(90deg,var(--cyan),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.grad-pink{background:linear-gradient(90deg,var(--pink),var(--amber));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hero-sub{font-size:18px;color:var(--text2);line-height:1.7;max-width:560px;margin:0 auto 48px;font-weight:300;animation:fadeUp 0.6s ease 0.2s both;}
+.hero-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;animation:fadeUp 0.6s ease 0.3s both;}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;border-radius:var(--r-full);font-size:15px;font-weight:600;font-family:var(--font-display);cursor:pointer;border:none;transition:all 0.25s;letter-spacing:0.2px;position:relative;overflow:hidden;}
+.btn::after{content:'';position:absolute;inset:0;background:rgba(255,255,255,0);transition:background 0.2s;}
+.btn:hover::after{background:rgba(255,255,255,0.07);}
+.btn:active{transform:scale(0.97);}
+.btn-cyan{background:linear-gradient(135deg,var(--cyan),var(--cyan2));color:#000;box-shadow:0 0 30px rgba(0,229,255,0.3),0 4px 15px rgba(0,0,0,0.3);}
+.btn-cyan:hover{box-shadow:0 0 50px rgba(0,229,255,0.5),0 4px 20px rgba(0,0,0,0.4);transform:translateY(-2px);}
+.btn-pink{background:linear-gradient(135deg,var(--pink),var(--pink2));color:#fff;box-shadow:0 0 30px rgba(255,60,172,0.3),0 4px 15px rgba(0,0,0,0.3);}
+.btn-pink:hover{box-shadow:0 0 50px rgba(255,60,172,0.5);transform:translateY(-2px);}
+.btn-ghost{background:var(--surface);color:var(--text);border:1px solid var(--border2);}
+.btn-ghost:hover{border-color:rgba(255,255,255,0.25);background:var(--surface2);transform:translateY(-2px);}
+.btn-purple{background:linear-gradient(135deg,var(--purple),var(--purple2));color:#fff;box-shadow:0 0 30px rgba(123,97,255,0.3),0 4px 15px rgba(0,0,0,0.3);}
+.btn-purple:hover{box-shadow:0 0 50px rgba(123,97,255,0.5);transform:translateY(-2px);}
+.btn-amber{background:linear-gradient(135deg,var(--amber),var(--amber2));color:#000;box-shadow:0 0 30px rgba(255,184,0,0.3);}
+.btn-amber:hover{box-shadow:0 0 50px rgba(255,184,0,0.5);transform:translateY(-2px);}
+.btn-lg{padding:18px 36px;font-size:17px;}
+.btn:disabled{opacity:0.4;cursor:not-allowed;transform:none!important;}
+.stats-row{display:flex;gap:1px;background:var(--border);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;max-width:700px;margin:60px auto 0;animation:fadeUp 0.6s ease 0.4s both;}
+.stat-item{flex:1;padding:24px 20px;background:var(--surface);text-align:center;transition:background 0.2s;}
+.stat-item:hover{background:var(--surface2);}
+.stat-val{font-family:var(--font-display);font-size:28px;font-weight:800;line-height:1;margin-bottom:6px;}
+.stat-label{font-size:12px;color:var(--text2);font-weight:400;text-transform:uppercase;letter-spacing:0.5px;}
+.section-heading{font-family:var(--font-display);font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--text3);margin-bottom:20px;}
+.home-sections{max-width:1100px;margin:60px auto 0;padding:0 24px 80px;}
+.section-block{margin-bottom:60px;}
+.exam-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;}
+.exam-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);padding:28px;cursor:pointer;transition:all 0.3s;position:relative;overflow:hidden;animation:fadeUp 0.5s ease both;}
+.exam-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--card-grad,var(--cyan));opacity:0;transition:opacity 0.3s;}
+.exam-card:hover{border-color:var(--border2);background:var(--surface2);transform:translateY(-4px);}
+.exam-card:hover::before{opacity:1;}
+.card-icon-wrap{width:52px;height:52px;border-radius:var(--r-md);display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:18px;}
+.card-title{font-family:var(--font-display);font-size:20px;font-weight:700;margin-bottom:8px;letter-spacing:-0.3px;}
+.card-desc{font-size:14px;color:var(--text2);line-height:1.6;margin-bottom:18px;}
+.card-tags{display:flex;gap:6px;flex-wrap:wrap;}
+.tag{padding:4px 10px;border-radius:var(--r-full);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;}
+.brain-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;}
+.brain-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:22px 18px;cursor:pointer;transition:all 0.25s;text-align:center;animation:fadeUp 0.5s ease both;}
+.brain-card:hover{border-color:var(--border2);background:var(--surface2);transform:translateY(-3px);}
+.brain-icon{font-size:32px;margin-bottom:12px;display:block;}
+.brain-name{font-family:var(--font-display);font-size:14px;font-weight:700;margin-bottom:4px;}
+.brain-desc{font-size:12px;color:var(--text2);line-height:1.5;}
+.brain-diff{display:inline-block;margin-top:10px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;padding:3px 8px;border-radius:var(--r-full);}
+.level-easy{background:rgba(0,255,135,0.1);color:var(--green);}
+.level-med{background:rgba(255,184,0,0.1);color:var(--amber);}
+.level-hard{background:rgba(255,71,87,0.1);color:var(--red);}
+.exam-container{max-width:800px;margin:0 auto;padding:40px 24px 80px;}
+.back-link{display:inline-flex;align-items:center;gap:6px;font-size:14px;color:var(--text2);cursor:pointer;border:none;background:none;font-family:var(--font-body);transition:color 0.2s;padding:0;}
+.back-link:hover{color:var(--text);}
+.config-section{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);padding:28px;margin-bottom:16px;}
+.config-label{font-family:var(--font-display);font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--text2);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.pill-row{display:flex;gap:8px;flex-wrap:wrap;}
+.pill{padding:9px 18px;border-radius:var(--r-full);font-size:13px;font-weight:500;font-family:var(--font-body);cursor:pointer;border:1px solid var(--border2);background:transparent;color:var(--text2);transition:all 0.2s;}
+.pill:hover{border-color:rgba(255,255,255,0.25);color:var(--text);background:var(--surface2);}
+.pill.active.cyan{background:var(--cyan);border-color:var(--cyan);color:#000;box-shadow:0 0 12px rgba(0,229,255,0.3);}
+.pill.active.pink{background:var(--pink);border-color:var(--pink);color:#fff;box-shadow:0 0 12px rgba(255,60,172,0.3);}
+.pill.active.amber{background:var(--amber);border-color:var(--amber);color:#000;box-shadow:0 0 12px rgba(255,184,0,0.3);}
+.pill.active.purple{background:var(--purple);border-color:var(--purple);color:#fff;box-shadow:0 0 12px rgba(123,97,255,0.3);}
+.pill.active.green{background:var(--green);border-color:var(--green);color:#000;box-shadow:0 0 12px rgba(0,255,135,0.3);}
+.loading-state{text-align:center;padding:80px 24px;}
+.ai-loader{width:72px;height:72px;border-radius:50%;background:conic-gradient(var(--cyan),var(--purple),var(--pink),var(--cyan));animation:spin 1s linear infinite;margin:0 auto 24px;position:relative;}
+.ai-loader::after{content:'';position:absolute;inset:6px;border-radius:50%;background:var(--bg);}
+@keyframes spin{to{transform:rotate(360deg);}}
+.loading-title{font-family:var(--font-display);font-size:22px;font-weight:700;margin-bottom:8px;}
+.loading-sub{font-size:14px;color:var(--text2);}
+.loading-dots span{display:inline-block;animation:blink 1.4s infinite both;}
+.loading-dots span:nth-child(2){animation-delay:0.2s;}
+.loading-dots span:nth-child(3){animation-delay:0.4s;}
+@keyframes blink{0%,80%,100%{opacity:0;}40%{opacity:1;}}
+.q-progress-wrap{margin-bottom:24px;}
+.q-progress-info{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:8px;}
+.q-num{font-family:var(--font-display);font-size:13px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:1px;}
+.q-score-badge{display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:var(--r-full);background:rgba(0,255,135,0.08);border:1px solid rgba(0,255,135,0.2);font-size:12px;font-weight:600;color:var(--green);}
+.progress-bar-track{height:4px;background:var(--surface2);border-radius:var(--r-full);overflow:hidden;}
+.progress-bar-fill{height:100%;background:linear-gradient(90deg,var(--cyan),var(--purple));border-radius:var(--r-full);transition:width 0.4s ease;}
+.q-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);padding:32px;margin-bottom:16px;}
+.q-materia-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:var(--r-full);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:20px;}
+.q-text{font-size:18px;line-height:1.7;color:var(--text);font-weight:400;margin-bottom:28px;}
+.options-grid{display:flex;flex-direction:column;gap:10px;}
+.option-btn{display:flex;align-items:flex-start;gap:14px;padding:16px 20px;border-radius:var(--r-lg);border:1px solid var(--border);background:var(--bg2);color:var(--text);font-size:15px;font-family:var(--font-body);cursor:pointer;text-align:left;transition:all 0.2s;line-height:1.5;}
+.option-btn:hover:not(:disabled){border-color:rgba(0,229,255,0.3);background:rgba(0,229,255,0.04);transform:translateX(4px);}
+.option-btn .opt-letter{width:28px;height:28px;border-radius:var(--r-sm);background:var(--surface2);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:13px;font-weight:700;flex-shrink:0;transition:all 0.2s;}
+.option-btn:hover:not(:disabled) .opt-letter{background:rgba(0,229,255,0.15);border-color:rgba(0,229,255,0.4);color:var(--cyan);}
+.option-btn.correct{border-color:var(--green);background:rgba(0,255,135,0.06);color:var(--green);}
+.option-btn.correct .opt-letter{background:rgba(0,255,135,0.2);border-color:var(--green);color:var(--green);}
+.option-btn.wrong{border-color:var(--red);background:rgba(255,71,87,0.06);color:var(--red);}
+.option-btn.wrong .opt-letter{background:rgba(255,71,87,0.2);border-color:var(--red);color:var(--red);}
+.option-btn:disabled{cursor:default;}
+.explanation-card{background:rgba(0,229,255,0.04);border:1px solid rgba(0,229,255,0.15);border-radius:var(--r-lg);padding:18px 20px;margin-top:16px;display:none;font-size:14px;color:var(--text2);line-height:1.7;}
+.explanation-card .exp-title{font-family:var(--font-display);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--cyan);margin-bottom:8px;}
+.q-footer{display:flex;justify-content:space-between;align-items:center;margin-top:20px;flex-wrap:wrap;gap:12px;}
+.results-screen{text-align:center;padding:60px 24px 80px;max-width:700px;margin:0 auto;}
+.result-circle-wrap{position:relative;width:180px;height:180px;margin:0 auto 32px;}
+.result-svg{width:180px;height:180px;transform:rotate(-90deg);}
+.result-svg circle{fill:none;stroke-width:8;stroke-linecap:round;}
+.result-track{stroke:var(--surface2);}
+.result-center{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;}
+.result-pct{font-family:var(--font-display);font-size:40px;font-weight:800;letter-spacing:-2px;}
+.result-label{font-size:12px;color:var(--text2);}
+.result-title{font-family:var(--font-display);font-size:32px;font-weight:800;letter-spacing:-1px;margin-bottom:12px;}
+.result-sub{font-size:16px;color:var(--text2);line-height:1.6;margin-bottom:40px;}
+.result-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:40px;}
+.rs-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:20px 12px;}
+.rs-val{font-family:var(--font-display);font-size:26px;font-weight:800;margin-bottom:4px;}
+.rs-name{font-size:12px;color:var(--text2);}
+.brain-container{max-width:700px;margin:0 auto;padding:40px 24px 80px;}
+.game-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;flex-wrap:wrap;gap:12px;}
+.game-title{font-family:var(--font-display);font-size:22px;font-weight:800;letter-spacing:-0.5px;}
+.game-stats{display:flex;gap:10px;}
+.game-stat{display:flex;align-items:center;gap:6px;padding:7px 14px;border-radius:var(--r-full);background:var(--surface);border:1px solid var(--border);font-size:13px;font-weight:600;}
+.game-stat .gs-val{font-family:var(--font-display);}
+.game-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);padding:32px;min-height:340px;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.game-instruction{font-size:14px;color:var(--text2);text-align:center;margin-bottom:28px;line-height:1.6;}
+.feedback-msg{padding:10px 20px;border-radius:var(--r-full);font-size:14px;font-weight:600;margin-top:20px;font-family:var(--font-display);text-align:center;}
+.feedback-ok{background:rgba(0,255,135,0.1);color:var(--green);border:1px solid rgba(0,255,135,0.3);}
+.feedback-err{background:rgba(255,71,87,0.1);color:var(--red);border:1px solid rgba(255,71,87,0.3);}
+.memory-grid{display:grid;gap:10px;margin:0 auto;}
+.mem-cell{width:60px;height:60px;border-radius:var(--r-md);border:1px solid var(--border2);background:var(--bg2);cursor:pointer;transition:all 0.15s;position:relative;overflow:hidden;}
+.mem-cell.lit{background:var(--cyan);border-color:var(--cyan);box-shadow:0 0 20px rgba(0,229,255,0.5);}
+.mem-cell.lit-pink{background:var(--pink);border-color:var(--pink);box-shadow:0 0 20px rgba(255,60,172,0.5);}
+.mem-cell.selected{background:var(--purple);border-color:var(--purple);box-shadow:0 0 15px rgba(123,97,255,0.4);}
+.mem-cell.hit{background:var(--green);border-color:var(--green);box-shadow:0 0 15px rgba(0,255,135,0.4);}
+.mem-cell.miss{background:var(--red);border-color:var(--red);box-shadow:0 0 15px rgba(255,71,87,0.4);animation:shake 0.3s;}
+@keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-4px);}75%{transform:translateX(4px);}}
+.seq-display{display:flex;align-items:center;gap:12px;margin-bottom:32px;flex-wrap:wrap;justify-content:center;}
+.seq-num{font-family:var(--font-display);font-size:28px;font-weight:800;color:var(--text);background:var(--bg2);border:1px solid var(--border2);border-radius:var(--r-md);width:64px;height:64px;display:flex;align-items:center;justify-content:center;letter-spacing:-1px;}
+.seq-question{font-family:var(--font-display);font-size:28px;font-weight:800;color:var(--cyan);background:rgba(0,229,255,0.08);border:1px solid rgba(0,229,255,0.3);border-radius:var(--r-md);width:64px;height:64px;display:flex;align-items:center;justify-content:center;animation:breathe 2s ease-in-out infinite;}
+@keyframes breathe{0%,100%{box-shadow:0 0 10px rgba(0,229,255,0.3);}50%{box-shadow:0 0 25px rgba(0,229,255,0.6);}}
+.seq-arrow{color:var(--text3);font-size:18px;}
+.seq-options{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;}
+.seq-opt{font-family:var(--font-display);font-size:20px;font-weight:700;padding:14px 24px;border-radius:var(--r-md);border:1px solid var(--border2);background:var(--bg2);color:var(--text);cursor:pointer;transition:all 0.2s;min-width:70px;text-align:center;}
+.seq-opt:hover:not(:disabled){border-color:var(--cyan);color:var(--cyan);background:rgba(0,229,255,0.06);transform:translateY(-2px);}
+.seq-opt.correct{border-color:var(--green);color:var(--green);background:rgba(0,255,135,0.08);box-shadow:0 0 15px rgba(0,255,135,0.3);}
+.seq-opt.wrong{border-color:var(--red);color:var(--red);background:rgba(255,71,87,0.08);}
+.stroop-word{font-family:var(--font-display);font-size:56px;font-weight:800;letter-spacing:-2px;text-align:center;margin-bottom:36px;text-shadow:0 0 30px currentColor;animation:fadeUp 0.3s ease;}
+.color-btns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;}
+.color-btn{padding:12px 22px;border-radius:var(--r-md);border:1px solid var(--border2);background:var(--bg2);color:var(--text);font-family:var(--font-display);font-size:14px;font-weight:700;cursor:pointer;transition:all 0.2s;letter-spacing:0.5px;}
+.color-btn:hover:not(:disabled){transform:translateY(-2px);}
+.color-btn[data-c="Rojo"]:hover:not(:disabled){border-color:#FF4757;color:#FF4757;background:rgba(255,71,87,0.08);}
+.color-btn[data-c="Azul"]:hover:not(:disabled){border-color:#378ADD;color:#378ADD;background:rgba(55,138,221,0.08);}
+.color-btn[data-c="Verde"]:hover:not(:disabled){border-color:#00FF87;color:#00FF87;background:rgba(0,255,135,0.08);}
+.color-btn[data-c="Amarillo"]:hover:not(:disabled){border-color:#FFB800;color:#FFB800;background:rgba(255,184,0,0.08);}
+.color-btn[data-c="Morado"]:hover:not(:disabled){border-color:#7B61FF;color:#7B61FF;background:rgba(123,97,255,0.08);}
+.color-btn.correct{border-color:var(--green);color:var(--green);background:rgba(0,255,135,0.08);}
+.color-btn.wrong{border-color:var(--red);color:var(--red);background:rgba(255,71,87,0.08);}
+.logic-premise{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r-lg);padding:20px 24px;width:100%;margin-bottom:24px;}
+.premise-row{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);font-size:15px;color:var(--text2);line-height:1.5;}
+.premise-row:last-child{border-bottom:none;}
+.premise-num{font-family:var(--font-display);font-size:11px;font-weight:700;color:var(--cyan);background:rgba(0,229,255,0.1);border:1px solid rgba(0,229,255,0.2);border-radius:var(--r-sm);padding:3px 7px;margin-top:2px;flex-shrink:0;}
+.logic-conclusion{background:rgba(123,97,255,0.06);border:1px solid rgba(123,97,255,0.2);border-radius:var(--r-lg);padding:16px 20px;margin-bottom:24px;font-size:16px;font-weight:500;color:var(--text);width:100%;text-align:center;line-height:1.5;}
+.logic-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--purple);margin-bottom:8px;display:block;}
+.tf-row{display:flex;gap:12px;justify-content:center;}
+.tf-btn{padding:14px 36px;border-radius:var(--r-md);font-family:var(--font-display);font-size:15px;font-weight:700;cursor:pointer;border:1px solid var(--border2);background:var(--bg2);transition:all 0.2s;letter-spacing:0.5px;}
+.tf-btn.valid{color:var(--green);}
+.tf-btn.invalid{color:var(--red);}
+.tf-btn.valid:hover:not(:disabled){border-color:var(--green);background:rgba(0,255,135,0.08);transform:translateY(-2px);}
+.tf-btn.invalid:hover:not(:disabled){border-color:var(--red);background:rgba(255,71,87,0.08);transform:translateY(-2px);}
+.tf-btn.correct{border-color:var(--green);background:rgba(0,255,135,0.08);box-shadow:0 0 15px rgba(0,255,135,0.2);}
+.tf-btn.wrong{border-color:var(--red);background:rgba(255,71,87,0.08);}
+.math-problem{font-family:var(--font-display);font-size:52px;font-weight:800;letter-spacing:-2px;text-align:center;margin-bottom:36px;animation:fadeUp 0.25s ease;}
+.math-op{color:var(--cyan);}
+.math-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%;max-width:360px;}
+.math-opt{font-family:var(--font-display);font-size:22px;font-weight:700;padding:18px;border-radius:var(--r-md);border:1px solid var(--border2);background:var(--bg2);color:var(--text);cursor:pointer;transition:all 0.15s;text-align:center;}
+.math-opt:hover:not(:disabled){border-color:var(--purple);color:var(--purple);background:rgba(123,97,255,0.06);transform:scale(1.03);}
+.math-opt.correct{border-color:var(--green);color:var(--green);background:rgba(0,255,135,0.08);box-shadow:0 0 15px rgba(0,255,135,0.3);}
+.math-opt.wrong{border-color:var(--red);color:var(--red);background:rgba(255,71,87,0.08);}
+.round-indicator{display:flex;gap:4px;margin-bottom:20px;justify-content:center;flex-wrap:wrap;}
+.round-dot{width:8px;height:8px;border-radius:50%;background:var(--surface2);border:1px solid var(--border2);transition:all 0.3s;}
+.round-dot.done{background:var(--cyan);border-color:var(--cyan);box-shadow:0 0 6px rgba(0,229,255,0.5);}
+.round-dot.current{background:var(--purple);border-color:var(--purple);box-shadow:0 0 6px rgba(123,97,255,0.5);animation:pulse 1s infinite;}
+.toast{position:fixed;top:80px;left:50%;transform:translateX(-50%) translateY(-20px);background:var(--surface);border:1px solid var(--border2);border-radius:var(--r-lg);padding:14px 24px;font-family:var(--font-display);font-size:14px;font-weight:700;z-index:200;opacity:0;transition:all 0.3s;pointer-events:none;white-space:nowrap;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.streak-display{display:flex;align-items:center;gap:6px;font-family:var(--font-display);font-size:14px;font-weight:700;color:var(--amber);}
+.exam-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:32px;flex-wrap:wrap;gap:12px;}
+::-webkit-scrollbar{width:6px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--surface2);border-radius:3px;}
+::-webkit-scrollbar-thumb:hover{background:var(--border2);}
+@media(max-width:600px){
+  .hero-title{font-size:34px;letter-spacing:-1.5px;}
+  .hero-sub{font-size:15px;}
+  .nav-badge{display:none;}
+  .result-stats{grid-template-columns:1fr 1fr;}
+  .math-problem{font-size:38px;}
+  .seq-num,.seq-question{width:52px;height:52px;font-size:22px;}
+  .stroop-word{font-size:40px;}
+  .stats-row{flex-wrap:wrap;}
+  .stat-item{min-width:45%;}
 }
-
-html { scroll-behavior: smooth; }
-body {
-  font-family: var(--font-body);
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100vh;
-  overflow-x: hidden;
-  cursor: default;
-}
-
-/* ===== NOISE OVERLAY ===== */
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-  pointer-events: none;
-  z-index: 0;
-  opacity: 0.4;
-}
-
-/* ===== GRID BACKGROUND ===== */
-body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(0,229,255,0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0,229,255,0.03) 1px, transparent 1px);
-  background-size: 60px 60px;
-  pointer-events: none;
-  z-index: 0;
-}
-
-/* ===== GLOW ORBS ===== */
-.orb {
-  position: fixed;
-  border-radius: 50%;
-  filter: blur(80px);
-  pointer-events: none;
-  z-index: 0;
-  animation: orbFloat 8s ease-in-out infinite;
-}
-.orb-1 { width: 500px; height: 500px; background: rgba(0,229,255,0.06); top: -150px; right: -100px; animation-delay: 0s; }
-.orb-2 { width: 400px; height: 400px; background: rgba(255,60,172,0.05); bottom: -100px; left: -100px; animation-delay: 3s; }
-.orb-3 { width: 300px; height: 300px; background: rgba(123,97,255,0.06); top: 40%; left: 30%; animation-delay: 6s; }
-@keyframes orbFloat {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  33% { transform: translate(20px, -30px) scale(1.05); }
-  66% { transform: translate(-15px, 20px) scale(0.95); }
-}
-
-/* ===== MAIN WRAPPER ===== */
-#app {
-  position: relative;
-  z-index: 1;
-  min-height: 100vh;
-}
-
-/* ===== NAVBAR ===== */
-nav {
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  z-index: 100;
-  padding: 0 24px;
-  height: 64px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: rgba(8,12,20,0.85);
-  backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--border);
-}
-.nav-logo {
-  font-family: var(--font-display);
-  font-size: 22px;
-  font-weight: 800;
-  letter-spacing: -0.5px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-.nav-logo .logo-icon {
-  width: 32px; height: 32px;
-  background: linear-gradient(135deg, var(--cyan), var(--purple));
-  border-radius: var(--r-sm);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 16px;
-}
-.nav-logo span { color: var(--cyan); }
-.nav-links { display: flex; gap: 4px; }
-.nav-link {
-  padding: 8px 16px;
-  border-radius: var(--r-full);
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--text2);
-  cursor: pointer;
-  transition: all 0.2s;
-  border: none;
-  background: transparent;
-  font-family: var(--font-body);
-}
-.nav-link:hover { color: var(--text); background: var(--surface); }
-.nav-link.active { color: var(--cyan); background: rgba(0,229,255,0.1); }
-.nav-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 14px;
-  border-radius: var(--r-full);
-  font-size: 13px;
-  font-weight: 500;
-  background: rgba(0,229,255,0.08);
-  border: 1px solid rgba(0,229,255,0.2);
-  color: var(--cyan);
-}
-.nav-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--cyan); animation: pulse 2s infinite; }
-@keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(0.8); } }
-
-/* ===== SCREENS ===== */
-.screen { display: none; padding-top: 64px; min-height: 100vh; }
-.screen.active { display: block; }
-
-/* ===== HOME SCREEN ===== */
-.hero-section {
-  padding: 80px 24px 60px;
-  max-width: 900px;
-  margin: 0 auto;
-  text-align: center;
-}
-.hero-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 18px;
-  border-radius: var(--r-full);
-  background: rgba(0,229,255,0.08);
-  border: 1px solid rgba(0,229,255,0.2);
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--cyan);
-  margin-bottom: 32px;
-  animation: fadeUp 0.6s ease both;
-}
-.hero-chip::before { content: '⚡'; }
-.hero-title {
-  font-family: var(--font-display);
-  font-size: clamp(38px, 7vw, 72px);
-  font-weight: 800;
-  line-height: 1.05;
-  letter-spacing: -2px;
-  margin-bottom: 24px;
-  animation: fadeUp 0.6s ease 0.1s both;
-}
-.hero-title .line2 { display: block; }
-.hero-title .grad-cyan {
-  background: linear-gradient(90deg, var(--cyan), var(--purple));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-.hero-title .grad-pink {
-  background: linear-gradient(90deg, var(--pink), var(--amber));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-.hero-sub {
-  font-size: 18px;
-  color: var(--text2);
-  line-height: 1.7;
-  max-width: 560px;
-  margin: 0 auto 48px;
-  font-weight: 300;
-  animation: fadeUp 0.6s ease 0.2s both;
-}
-.hero-actions {
-  display: flex;
-  gap: 12px;
-  justify-content: center;
-  flex-wrap: wrap;
-  animation: fadeUp 0.6s ease 0.3s both;
-}
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* ===== BUTTONS ===== */
-.btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 14px 28px;
-  border-radius: var(--r-full);
-  font-size: 15px;
-  font-weight: 600;
-  font-family: var(--font-display);
-  cursor: pointer;
-  border: none;
-  transition: all 0.25s;
-  letter-spacing: 0.2px;
-  position: relative;
-  overflow: hidden;
-}
-.btn::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: rgba(255,255,255,0);
-  transition: background 0.2s;
-}
-.btn:hover::after { background: rgba(255,255,255,0.07); }
-.btn:active { transform: scale(0.97); }
-.btn-cyan {
-  background: linear-gradient(135deg, var(--cyan), var(--cyan2));
-  color: #000;
-  box-shadow: 0 0 30px rgba(0,229,255,0.3), 0 4px 15px rgba(0,0,0,0.3);
-}
-.btn-cyan:hover { box-shadow: 0 0 50px rgba(0,229,255,0.5), 0 4px 20px rgba(0,0,0,0.4); transform: translateY(-2px); }
-.btn-pink {
-  background: linear-gradient(135deg, var(--pink), var(--pink2));
-  color: #fff;
-  box-shadow: 0 0 30px rgba(255,60,172,0.3), 0 4px 15px rgba(0,0,0,0.3);
-}
-.btn-pink:hover { box-shadow: 0 0 50px rgba(255,60,172,0.5), 0 4px 20px rgba(0,0,0,0.4); transform: translateY(-2px); }
-.btn-ghost {
-  background: var(--surface);
-  color: var(--text);
-  border: 1px solid var(--border2);
-}
-.btn-ghost:hover { border-color: rgba(255,255,255,0.25); background: var(--surface2); transform: translateY(-2px); }
-.btn-purple {
-  background: linear-gradient(135deg, var(--purple), var(--purple2));
-  color: #fff;
-  box-shadow: 0 0 30px rgba(123,97,255,0.3), 0 4px 15px rgba(0,0,0,0.3);
-}
-.btn-purple:hover { box-shadow: 0 0 50px rgba(123,97,255,0.5); transform: translateY(-2px); }
-.btn-amber {
-  background: linear-gradient(135deg, var(--amber), var(--amber2));
-  color: #000;
-  box-shadow: 0 0 30px rgba(255,184,0,0.3), 0 4px 15px rgba(0,0,0,0.3);
-}
-.btn-amber:hover { box-shadow: 0 0 50px rgba(255,184,0,0.5); transform: translateY(-2px); }
-.btn-sm { padding: 9px 18px; font-size: 13px; }
-.btn-lg { padding: 18px 36px; font-size: 17px; }
-.btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none !important; }
-
-/* ===== STATS ROW HOME ===== */
-.stats-row {
-  display: flex;
-  gap: 1px;
-  background: var(--border);
-  border: 1px solid var(--border);
-  border-radius: var(--r-lg);
-  overflow: hidden;
-  max-width: 700px;
-  margin: 60px auto 0;
-  animation: fadeUp 0.6s ease 0.4s both;
-}
-.stat-item {
-  flex: 1;
-  padding: 24px 20px;
-  background: var(--surface);
-  text-align: center;
-}
-.stat-item:hover { background: var(--surface2); }
-.stat-val {
-  font-family: var(--font-display);
-  font-size: 28px;
-  font-weight: 800;
-  line-height: 1;
-  margin-bottom: 6px;
-}
-.stat-label { font-size: 12px; color: var(--text2); font-weight: 400; text-transform: uppercase; letter-spacing: 0.5px; }
-
-/* ===== SECTION CARDS ===== */
-.section-heading {
-  font-family: var(--font-display);
-  font-size: 13px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  color: var(--text3);
-  margin-bottom: 20px;
-}
-.home-sections {
-  max-width: 1100px;
-  margin: 60px auto 0;
-  padding: 0 24px 80px;
-}
-.section-block { margin-bottom: 60px; }
-
-/* Examen Cards */
-.exam-cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 16px;
-}
-.exam-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--r-xl);
-  padding: 28px;
-  cursor: pointer;
-  transition: all 0.3s;
-  position: relative;
-  overflow: hidden;
-  animation: fadeUp 0.5s ease both;
-}
-.exam-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 2px;
-  background: var(--card-accent, var(--cyan));
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-.exam-card:hover { border-color: var(--border2); background: var(--surface2); transform: translateY(-4px); }
-.exam-card:hover::before { opacity: 1; }
-.exam-card.cyan-card { --card-accent: linear-gradient(90deg, var(--cyan), var(--purple)); }
-.exam-card.pink-card { --card-accent: linear-gradient(90deg, var(--pink), var(--amber)); }
-.exam-card.purple-card { --card-accent: linear-gradient(90deg, var(--purple), var(--cyan)); }
-.exam-card.amber-card { --card-accent: linear-gradient(90deg, var(--amber), var(--pink)); }
-.card-icon-wrap {
-  width: 52px; height: 52px;
-  border-radius: var(--r-md);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 24px;
-  margin-bottom: 18px;
-}
-.card-title {
-  font-family: var(--font-display);
-  font-size: 20px;
-  font-weight: 700;
-  margin-bottom: 8px;
-  letter-spacing: -0.3px;
-}
-.card-desc { font-size: 14px; color: var(--text2); line-height: 1.6; margin-bottom: 18px; }
-.card-tags { display: flex; gap: 6px; flex-wrap: wrap; }
-.tag {
-  padding: 4px 10px;
-  border-radius: var(--r-full);
-  font-size: 11px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-/* Brain Cards */
-.brain-cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 12px;
-}
-.brain-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--r-lg);
-  padding: 22px 18px;
-  cursor: pointer;
-  transition: all 0.25s;
-  text-align: center;
-  animation: fadeUp 0.5s ease both;
-}
-.brain-card:hover { border-color: var(--border2); background: var(--surface2); transform: translateY(-3px); }
-.brain-icon { font-size: 32px; margin-bottom: 12px; display: block; }
-.brain-name {
-  font-family: var(--font-display);
-  font-size: 14px;
-  font-weight: 700;
-  margin-bottom: 4px;
-}
-.brain-desc { font-size: 12px; color: var(--text2); line-height: 1.5; }
-.brain-diff {
-  display: inline-block;
-  margin-top: 10px;
-  font-size: 10px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  padding: 3px 8px;
-  border-radius: var(--r-full);
-}
-
-/* ===== EXAM SCREEN ===== */
-.exam-container {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 40px 24px 80px;
-}
-.exam-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 32px;
-  flex-wrap: wrap;
-  gap: 12px;
-}
-.back-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 14px;
-  color: var(--text2);
-  cursor: pointer;
-  border: none;
-  background: none;
-  font-family: var(--font-body);
-  transition: color 0.2s;
-  padding: 0;
-}
-.back-link:hover { color: var(--text); }
-.back-link svg { transition: transform 0.2s; }
-.back-link:hover svg { transform: translateX(-3px); }
-
-/* Config Screen */
-.config-section {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--r-xl);
-  padding: 28px;
-  margin-bottom: 16px;
-}
-.config-label {
-  font-family: var(--font-display);
-  font-size: 13px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  color: var(--text2);
-  margin-bottom: 14px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.config-label span { font-size: 16px; }
-.pill-row { display: flex; gap: 8px; flex-wrap: wrap; }
-.pill {
-  padding: 9px 18px;
-  border-radius: var(--r-full);
-  font-size: 13px;
-  font-weight: 500;
-  font-family: var(--font-body);
-  cursor: pointer;
-  border: 1px solid var(--border2);
-  background: transparent;
-  color: var(--text2);
-  transition: all 0.2s;
-}
-.pill:hover { border-color: rgba(255,255,255,0.25); color: var(--text); background: var(--surface2); }
-.pill.active { color: #000; font-weight: 600; }
-.pill.active.cyan { background: var(--cyan); border-color: var(--cyan); color: #000; box-shadow: 0 0 12px rgba(0,229,255,0.3); }
-.pill.active.pink { background: var(--pink); border-color: var(--pink); color: #fff; box-shadow: 0 0 12px rgba(255,60,172,0.3); }
-.pill.active.amber { background: var(--amber); border-color: var(--amber); color: #000; box-shadow: 0 0 12px rgba(255,184,0,0.3); }
-.pill.active.purple { background: var(--purple); border-color: var(--purple); color: #fff; box-shadow: 0 0 12px rgba(123,97,255,0.3); }
-.pill.active.green { background: var(--green); border-color: var(--green); color: #000; box-shadow: 0 0 12px rgba(0,255,135,0.3); }
-
-/* Loading State */
-.loading-state {
-  text-align: center;
-  padding: 80px 24px;
-}
-.ai-loader {
-  width: 72px; height: 72px;
-  border-radius: 50%;
-  background: conic-gradient(var(--cyan), var(--purple), var(--pink), var(--cyan));
-  animation: spin 1s linear infinite;
-  margin: 0 auto 24px;
-  position: relative;
-}
-.ai-loader::after {
-  content: '';
-  position: absolute;
-  inset: 6px;
-  border-radius: 50%;
-  background: var(--bg);
-}
-@keyframes spin { to { transform: rotate(360deg); } }
-.loading-title {
-  font-family: var(--font-display);
-  font-size: 22px;
-  font-weight: 700;
-  margin-bottom: 8px;
-}
-.loading-sub { font-size: 14px; color: var(--text2); }
-.loading-dots span {
-  display: inline-block;
-  animation: blink 1.4s infinite both;
-}
-.loading-dots span:nth-child(2) { animation-delay: 0.2s; }
-.loading-dots span:nth-child(3) { animation-delay: 0.4s; }
-@keyframes blink { 0%, 80%, 100% { opacity: 0; } 40% { opacity: 1; } }
-
-/* Question Area */
-.q-progress-wrap {
-  margin-bottom: 24px;
-}
-.q-progress-info {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
-}
-.q-num { font-family: var(--font-display); font-size: 13px; font-weight: 700; color: var(--text2); text-transform: uppercase; letter-spacing: 1px; }
-.q-score-badge {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 5px 12px;
-  border-radius: var(--r-full);
-  background: rgba(0,255,135,0.08);
-  border: 1px solid rgba(0,255,135,0.2);
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--green);
-}
-.progress-bar-track {
-  height: 4px;
-  background: var(--surface2);
-  border-radius: var(--r-full);
-  overflow: hidden;
-}
-.progress-bar-fill {
-  height: 100%;
-  background: linear-gradient(90deg, var(--cyan), var(--purple));
-  border-radius: var(--r-full);
-  transition: width 0.4s ease;
-}
-
-.q-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--r-xl);
-  padding: 32px;
-  margin-bottom: 16px;
-}
-.q-materia-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 14px;
-  border-radius: var(--r-full);
-  font-size: 12px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-bottom: 20px;
-}
-.q-text {
-  font-size: 18px;
-  line-height: 1.7;
-  color: var(--text);
-  font-weight: 400;
-  margin-bottom: 28px;
-}
-
-.options-grid { display: flex; flex-direction: column; gap: 10px; }
-.option-btn {
-  display: flex;
-  align-items: flex-start;
-  gap: 14px;
-  padding: 16px 20px;
-  border-radius: var(--r-lg);
-  border: 1px solid var(--border);
-  background: var(--bg2);
-  color: var(--text);
-  font-size: 15px;
-  font-family: var(--font-body);
-  cursor: pointer;
-  text-align: left;
-  transition: all 0.2s;
-  line-height: 1.5;
-}
-.option-btn:hover:not(:disabled) {
-  border-color: rgba(0,229,255,0.3);
-  background: rgba(0,229,255,0.04);
-  transform: translateX(4px);
-}
-.option-btn .opt-letter {
-  width: 28px; height: 28px;
-  border-radius: var(--r-sm);
-  background: var(--surface2);
-  border: 1px solid var(--border2);
-  display: flex; align-items: center; justify-content: center;
-  font-family: var(--font-display);
-  font-size: 13px;
-  font-weight: 700;
-  flex-shrink: 0;
-  transition: all 0.2s;
-}
-.option-btn:hover:not(:disabled) .opt-letter {
-  background: rgba(0,229,255,0.15);
-  border-color: rgba(0,229,255,0.4);
-  color: var(--cyan);
-}
-.option-btn.correct {
-  border-color: var(--green);
-  background: rgba(0,255,135,0.06);
-  color: var(--green);
-}
-.option-btn.correct .opt-letter {
-  background: rgba(0,255,135,0.2);
-  border-color: var(--green);
-  color: var(--green);
-}
-.option-btn.wrong {
-  border-color: var(--red);
-  background: rgba(255,71,87,0.06);
-  color: var(--red);
-}
-.option-btn.wrong .opt-letter {
-  background: rgba(255,71,87,0.2);
-  border-color: var(--red);
-  color: var(--red);
-}
-.option-btn:disabled { cursor: default; }
-
-.explanation-card {
-  background: rgba(0,229,255,0.04);
-  border: 1px solid rgba(0,229,255,0.15);
-  border-radius: var(--r-lg);
-  padding: 18px 20px;
-  margin-top: 16px;
-  display: none;
-  font-size: 14px;
-  color: var(--text2);
-  line-height: 1.7;
-}
-.explanation-card .exp-title {
-  font-family: var(--font-display);
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  color: var(--cyan);
-  margin-bottom: 8px;
-}
-
-.q-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 20px;
-  flex-wrap: wrap;
-  gap: 12px;
-}
-.q-timer {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 13px;
-  color: var(--text2);
-}
-
-/* Results Screen */
-.results-screen {
-  text-align: center;
-  padding: 60px 24px 80px;
-  max-width: 700px;
-  margin: 0 auto;
-}
-.result-circle-wrap {
-  position: relative;
-  width: 180px;
-  height: 180px;
-  margin: 0 auto 32px;
-}
-.result-svg { width: 180px; height: 180px; transform: rotate(-90deg); }
-.result-svg circle { fill: none; stroke-width: 8; stroke-linecap: round; }
-.result-track { stroke: var(--surface2); }
-.result-fill { stroke: url(#resultGrad); transition: stroke-dashoffset 1.5s cubic-bezier(0.4,0,0.2,1); }
-.result-center {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-}
-.result-pct {
-  font-family: var(--font-display);
-  font-size: 40px;
-  font-weight: 800;
-  letter-spacing: -2px;
-}
-.result-label { font-size: 12px; color: var(--text2); }
-.result-title {
-  font-family: var(--font-display);
-  font-size: 32px;
-  font-weight: 800;
-  letter-spacing: -1px;
-  margin-bottom: 12px;
-}
-.result-sub { font-size: 16px; color: var(--text2); line-height: 1.6; margin-bottom: 40px; }
-.result-stats {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-  margin-bottom: 40px;
-}
-.rs-item {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--r-lg);
-  padding: 20px 12px;
-}
-.rs-val {
-  font-family: var(--font-display);
-  font-size: 26px;
-  font-weight: 800;
-  margin-bottom: 4px;
-}
-.rs-name { font-size: 12px; color: var(--text2); }
-
-/* ===== BRAIN SCREEN ===== */
-.brain-container {
-  max-width: 700px;
-  margin: 0 auto;
-  padding: 40px 24px 80px;
-}
-.game-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 28px;
-  flex-wrap: wrap;
-  gap: 12px;
-}
-.game-title {
-  font-family: var(--font-display);
-  font-size: 22px;
-  font-weight: 800;
-  letter-spacing: -0.5px;
-}
-.game-stats {
-  display: flex;
-  gap: 10px;
-}
-.game-stat {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 7px 14px;
-  border-radius: var(--r-full);
-  background: var(--surface);
-  border: 1px solid var(--border);
-  font-size: 13px;
-  font-weight: 600;
-}
-.game-stat .gs-icon { font-size: 14px; }
-.game-stat .gs-val { font-family: var(--font-display); }
-
-.game-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--r-xl);
-  padding: 32px;
-  min-height: 340px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-.game-instruction {
-  font-size: 14px;
-  color: var(--text2);
-  text-align: center;
-  margin-bottom: 28px;
-  line-height: 1.6;
-}
-.feedback-msg {
-  padding: 10px 20px;
-  border-radius: var(--r-full);
-  font-size: 14px;
-  font-weight: 600;
-  margin-top: 20px;
-  font-family: var(--font-display);
-  text-align: center;
-}
-.feedback-ok { background: rgba(0,255,135,0.1); color: var(--green); border: 1px solid rgba(0,255,135,0.3); }
-.feedback-err { background: rgba(255,71,87,0.1); color: var(--red); border: 1px solid rgba(255,71,87,0.3); }
-
-/* Memory Game */
-.memory-grid {
-  display: grid;
-  gap: 10px;
-  margin: 0 auto;
-}
-.mem-cell {
-  width: 60px; height: 60px;
-  border-radius: var(--r-md);
-  border: 1px solid var(--border2);
-  background: var(--bg2);
-  cursor: pointer;
-  transition: all 0.15s;
-  position: relative;
-  overflow: hidden;
-}
-.mem-cell::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  opacity: 0;
-  transition: opacity 0.15s;
-}
-.mem-cell:hover::after { opacity: 1; background: rgba(255,255,255,0.04); }
-.mem-cell.lit { background: var(--cyan); border-color: var(--cyan); box-shadow: 0 0 20px rgba(0,229,255,0.5); }
-.mem-cell.lit-pink { background: var(--pink); border-color: var(--pink); box-shadow: 0 0 20px rgba(255,60,172,0.5); }
-.mem-cell.selected { background: var(--purple); border-color: var(--purple); box-shadow: 0 0 15px rgba(123,97,255,0.4); }
-.mem-cell.hit { background: var(--green); border-color: var(--green); box-shadow: 0 0 15px rgba(0,255,135,0.4); }
-.mem-cell.miss { background: var(--red); border-color: var(--red); box-shadow: 0 0 15px rgba(255,71,87,0.4); animation: shake 0.3s; }
-@keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-4px); }
-  75% { transform: translateX(4px); }
-}
-
-/* Sequences Game */
-.seq-display {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 32px;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-.seq-num {
-  font-family: var(--font-display);
-  font-size: 28px;
-  font-weight: 800;
-  color: var(--text);
-  background: var(--bg2);
-  border: 1px solid var(--border2);
-  border-radius: var(--r-md);
-  width: 64px; height: 64px;
-  display: flex; align-items: center; justify-content: center;
-  letter-spacing: -1px;
-}
-.seq-question {
-  font-family: var(--font-display);
-  font-size: 28px;
-  font-weight: 800;
-  color: var(--cyan);
-  background: rgba(0,229,255,0.08);
-  border: 1px solid rgba(0,229,255,0.3);
-  border-radius: var(--r-md);
-  width: 64px; height: 64px;
-  display: flex; align-items: center; justify-content: center;
-  animation: breathe 2s ease-in-out infinite;
-}
-@keyframes breathe {
-  0%, 100% { box-shadow: 0 0 10px rgba(0,229,255,0.3); }
-  50% { box-shadow: 0 0 25px rgba(0,229,255,0.6); }
-}
-.seq-arrow { color: var(--text3); font-size: 18px; }
-.seq-options {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-.seq-opt {
-  font-family: var(--font-display);
-  font-size: 20px;
-  font-weight: 700;
-  padding: 14px 24px;
-  border-radius: var(--r-md);
-  border: 1px solid var(--border2);
-  background: var(--bg2);
-  color: var(--text);
-  cursor: pointer;
-  transition: all 0.2s;
-  min-width: 70px;
-  text-align: center;
-}
-.seq-opt:hover:not(:disabled) { border-color: var(--cyan); color: var(--cyan); background: rgba(0,229,255,0.06); transform: translateY(-2px); }
-.seq-opt.correct { border-color: var(--green); color: var(--green); background: rgba(0,255,135,0.08); box-shadow: 0 0 15px rgba(0,255,135,0.3); }
-.seq-opt.wrong { border-color: var(--red); color: var(--red); background: rgba(255,71,87,0.08); }
-
-/* Stroop Game */
-.stroop-word {
-  font-family: var(--font-display);
-  font-size: 56px;
-  font-weight: 800;
-  letter-spacing: -2px;
-  text-align: center;
-  margin-bottom: 36px;
-  text-shadow: 0 0 30px currentColor;
-  animation: fadeUp 0.3s ease;
-}
-.stroop-instruction {
-  font-size: 14px;
-  color: var(--text2);
-  text-align: center;
-  margin-bottom: 24px;
-  line-height: 1.5;
-}
-.color-btns {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-.color-btn {
-  padding: 12px 22px;
-  border-radius: var(--r-md);
-  border: 1px solid var(--border2);
-  background: var(--bg2);
-  color: var(--text);
-  font-family: var(--font-display);
-  font-size: 14px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.2s;
-  letter-spacing: 0.5px;
-}
-.color-btn:hover:not(:disabled) { transform: translateY(-2px); }
-.color-btn[data-c="Rojo"]:hover:not(:disabled) { border-color: #FF4757; color: #FF4757; background: rgba(255,71,87,0.08); }
-.color-btn[data-c="Azul"]:hover:not(:disabled) { border-color: #378ADD; color: #378ADD; background: rgba(55,138,221,0.08); }
-.color-btn[data-c="Verde"]:hover:not(:disabled) { border-color: #00FF87; color: #00FF87; background: rgba(0,255,135,0.08); }
-.color-btn[data-c="Amarillo"]:hover:not(:disabled) { border-color: #FFB800; color: #FFB800; background: rgba(255,184,0,0.08); }
-.color-btn[data-c="Morado"]:hover:not(:disabled) { border-color: #7B61FF; color: #7B61FF; background: rgba(123,97,255,0.08); }
-.color-btn.correct { border-color: var(--green); color: var(--green); background: rgba(0,255,135,0.08); }
-.color-btn.wrong { border-color: var(--red); color: var(--red); background: rgba(255,71,87,0.08); }
-
-/* Logic Game */
-.logic-premise {
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: var(--r-lg);
-  padding: 20px 24px;
-  width: 100%;
-  margin-bottom: 24px;
-}
-.premise-row {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  padding: 8px 0;
-  border-bottom: 1px solid var(--border);
-  font-size: 15px;
-  color: var(--text2);
-  line-height: 1.5;
-}
-.premise-row:last-child { border-bottom: none; }
-.premise-num {
-  font-family: var(--font-display);
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--cyan);
-  background: rgba(0,229,255,0.1);
-  border: 1px solid rgba(0,229,255,0.2);
-  border-radius: var(--r-sm);
-  padding: 3px 7px;
-  margin-top: 2px;
-  flex-shrink: 0;
-}
-.logic-conclusion {
-  background: rgba(123,97,255,0.06);
-  border: 1px solid rgba(123,97,255,0.2);
-  border-radius: var(--r-lg);
-  padding: 16px 20px;
-  margin-bottom: 24px;
-  font-size: 16px;
-  font-weight: 500;
-  color: var(--text);
-  width: 100%;
-  text-align: center;
-  line-height: 1.5;
-}
-.logic-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--purple); margin-bottom: 8px; display: block; }
-.tf-row { display: flex; gap: 12px; justify-content: center; }
-.tf-btn {
-  padding: 14px 36px;
-  border-radius: var(--r-md);
-  font-family: var(--font-display);
-  font-size: 15px;
-  font-weight: 700;
-  cursor: pointer;
-  border: 1px solid var(--border2);
-  background: var(--bg2);
-  transition: all 0.2s;
-  letter-spacing: 0.5px;
-}
-.tf-btn.valid { color: var(--green); }
-.tf-btn.invalid { color: var(--red); }
-.tf-btn.valid:hover:not(:disabled) { border-color: var(--green); background: rgba(0,255,135,0.08); transform: translateY(-2px); }
-.tf-btn.invalid:hover:not(:disabled) { border-color: var(--red); background: rgba(255,71,87,0.08); transform: translateY(-2px); }
-.tf-btn.correct { border-color: var(--green); background: rgba(0,255,135,0.08); box-shadow: 0 0 15px rgba(0,255,135,0.2); }
-.tf-btn.wrong { border-color: var(--red); background: rgba(255,71,87,0.08); }
-
-/* Mental Math */
-.math-problem {
-  font-family: var(--font-display);
-  font-size: 52px;
-  font-weight: 800;
-  letter-spacing: -2px;
-  text-align: center;
-  margin-bottom: 36px;
-  animation: fadeUp 0.25s ease;
-}
-.math-op { color: var(--cyan); }
-.math-opts {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  width: 100%;
-  max-width: 360px;
-}
-.math-opt {
-  font-family: var(--font-display);
-  font-size: 22px;
-  font-weight: 700;
-  padding: 18px;
-  border-radius: var(--r-md);
-  border: 1px solid var(--border2);
-  background: var(--bg2);
-  color: var(--text);
-  cursor: pointer;
-  transition: all 0.15s;
-  text-align: center;
-}
-.math-opt:hover:not(:disabled) { border-color: var(--purple); color: var(--purple); background: rgba(123,97,255,0.06); transform: scale(1.03); }
-.math-opt.correct { border-color: var(--green); color: var(--green); background: rgba(0,255,135,0.08); box-shadow: 0 0 15px rgba(0,255,135,0.3); }
-.math-opt.wrong { border-color: var(--red); color: var(--red); background: rgba(255,71,87,0.08); }
-
-/* Timer bar */
-.timer-bar-wrap { width: 100%; height: 3px; background: var(--surface2); border-radius: var(--r-full); overflow: hidden; margin-bottom: 24px; }
-.timer-bar { height: 100%; background: linear-gradient(90deg, var(--cyan), var(--purple)); border-radius: var(--r-full); transition: width 0.1s linear; }
-.timer-bar.warn { background: linear-gradient(90deg, var(--amber), var(--red)); }
-
-/* Streak */
-.streak-display {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-family: var(--font-display);
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--amber);
-}
-.streak-fire { font-size: 18px; }
-
-/* Round indicator */
-.round-indicator {
-  display: flex;
-  gap: 4px;
-  margin-bottom: 20px;
-  justify-content: center;
-}
-.round-dot {
-  width: 8px; height: 8px;
-  border-radius: 50%;
-  background: var(--surface2);
-  border: 1px solid var(--border2);
-  transition: all 0.3s;
-}
-.round-dot.done { background: var(--cyan); border-color: var(--cyan); box-shadow: 0 0 6px rgba(0,229,255,0.5); }
-.round-dot.current { background: var(--purple); border-color: var(--purple); box-shadow: 0 0 6px rgba(123,97,255,0.5); animation: pulse 1s infinite; }
-
-/* Level up toast */
-.toast {
-  position: fixed;
-  top: 80px;
-  left: 50%;
-  transform: translateX(-50%) translateY(-20px);
-  background: var(--surface);
-  border: 1px solid var(--border2);
-  border-radius: var(--r-lg);
-  padding: 14px 24px;
-  font-family: var(--font-display);
-  font-size: 14px;
-  font-weight: 700;
-  z-index: 200;
-  opacity: 0;
-  transition: all 0.3s;
-  pointer-events: none;
-  white-space: nowrap;
-}
-.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-
-/* Responsive */
-@media (max-width: 600px) {
-  .hero-title { font-size: 34px; letter-spacing: -1.5px; }
-  .hero-sub { font-size: 15px; }
-  .nav-badge { display: none; }
-  .result-stats { grid-template-columns: 1fr 1fr; }
-  .math-problem { font-size: 38px; }
-  .seq-num, .seq-question { width: 52px; height: 52px; font-size: 22px; }
-  .stroop-word { font-size: 40px; }
-}
-
-/* Scrollbar */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: var(--bg); }
-::-webkit-scrollbar-thumb { background: var(--surface2); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: var(--border2); }
-
-/* Level badge on brain cards */
-.level-easy { background: rgba(0,255,135,0.1); color: var(--green); }
-.level-med { background: rgba(255,184,0,0.1); color: var(--amber); }
-.level-hard { background: rgba(255,71,87,0.1); color: var(--red); }
 </style>
 </head>
 <body>
-
-<!-- GLOW ORBS -->
 <div class="orb orb-1"></div>
 <div class="orb orb-2"></div>
 <div class="orb orb-3"></div>
-
-<!-- TOAST -->
 <div class="toast" id="toast"></div>
 
-<!-- NAV -->
 <nav>
   <div class="nav-logo">
     <div class="logo-icon">🧠</div>
@@ -1176,13 +260,10 @@ nav {
     <button class="nav-link" onclick="goScreen('exam')">Examen</button>
     <button class="nav-link" onclick="goScreen('brain')">Entrenamiento</button>
   </div>
-  <div class="nav-badge">
-    <div class="dot"></div>
-    IA Activa
-  </div>
+  <div class="nav-badge"><div class="dot"></div>IA Activa</div>
 </nav>
 
-<!-- ============================= HOME SCREEN ============================= -->
+<!-- HOME -->
 <div id="screen-home" class="screen active">
   <div class="hero-section">
     <div class="hero-chip">Preparación inteligente para el ICFES 2025</div>
@@ -1193,40 +274,21 @@ nav {
     </h1>
     <p class="hero-sub">Preguntas únicas generadas por IA, entrenamiento cognitivo y simulacros completos. Todo lo que necesitas para llegar al tope.</p>
     <div class="hero-actions">
-      <button class="btn btn-cyan btn-lg" onclick="goScreen('exam')">
-        <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2L11.5 7.5H17L12.5 11L14.5 17L9 13.5L3.5 17L5.5 11L1 7.5H6.5L9 2Z" fill="currentColor"/></svg>
-        Comenzar examen
-      </button>
-      <button class="btn btn-ghost btn-lg" onclick="goScreen('brain')">
-        🧠 Entrenar mente
-      </button>
+      <button class="btn btn-cyan btn-lg" onclick="goScreen('exam')">⚡ Comenzar examen</button>
+      <button class="btn btn-ghost btn-lg" onclick="goScreen('brain')">🧠 Entrenar mente</button>
     </div>
     <div class="stats-row">
-      <div class="stat-item">
-        <div class="stat-val" style="color:var(--cyan)">5</div>
-        <div class="stat-label">Materias ICFES</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-val" style="color:var(--pink)">∞</div>
-        <div class="stat-label">Preguntas únicas</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-val" style="color:var(--purple)">5</div>
-        <div class="stat-label">Juegos cognitivos</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-val" style="color:var(--amber)">100%</div>
-        <div class="stat-label">Gratis</div>
-      </div>
+      <div class="stat-item"><div class="stat-val" style="color:var(--cyan)">5</div><div class="stat-label">Materias ICFES</div></div>
+      <div class="stat-item"><div class="stat-val" style="color:var(--pink)">∞</div><div class="stat-label">Preguntas únicas</div></div>
+      <div class="stat-item"><div class="stat-val" style="color:var(--purple)">5</div><div class="stat-label">Juegos cognitivos</div></div>
+      <div class="stat-item"><div class="stat-val" style="color:var(--amber)">100%</div><div class="stat-label">Gratis</div></div>
     </div>
   </div>
-
   <div class="home-sections">
-    <!-- Exam modes -->
     <div class="section-block">
       <div class="section-heading">⚡ Modos de examen</div>
       <div class="exam-cards">
-        <div class="exam-card cyan-card" onclick="quickStart('Matemáticas','10','intermedio')" style="animation-delay:0.1s">
+        <div class="exam-card" style="--card-grad:linear-gradient(90deg,var(--cyan),var(--purple));animation-delay:0.1s" onclick="quickStart('Matemáticas','10','intermedio')">
           <div class="card-icon-wrap" style="background:rgba(0,229,255,0.1)">📐</div>
           <div class="card-title">Quiz Rápido</div>
           <div class="card-desc">10 preguntas generadas por IA. Perfecto para repasar un tema específico en minutos.</div>
@@ -1235,7 +297,7 @@ nav {
             <span class="tag" style="background:var(--surface2);color:var(--text2)">10 preguntas</span>
           </div>
         </div>
-        <div class="exam-card pink-card" onclick="quickStart('Lectura Crítica','25','intermedio')" style="animation-delay:0.2s">
+        <div class="exam-card" style="--card-grad:linear-gradient(90deg,var(--pink),var(--amber));animation-delay:0.2s" onclick="quickStart('Lectura Crítica','25','intermedio')">
           <div class="card-icon-wrap" style="background:rgba(255,60,172,0.1)">📝</div>
           <div class="card-title">Simulacro Medio</div>
           <div class="card-desc">25 preguntas mixtas para evaluar tu nivel real. Con retroalimentación detallada.</div>
@@ -1244,7 +306,7 @@ nav {
             <span class="tag" style="background:var(--surface2);color:var(--text2)">25 preguntas</span>
           </div>
         </div>
-        <div class="exam-card purple-card" onclick="quickStart('Matemáticas','50','avanzado')" style="animation-delay:0.3s">
+        <div class="exam-card" style="--card-grad:linear-gradient(90deg,var(--purple),var(--cyan));animation-delay:0.3s" onclick="quickStart('Matemáticas','50','avanzado')">
           <div class="card-icon-wrap" style="background:rgba(123,97,255,0.1)">🎯</div>
           <div class="card-title">Simulacro Completo</div>
           <div class="card-desc">50 preguntas nivel ICFES real. El simulacro más cercano al examen oficial.</div>
@@ -1253,7 +315,7 @@ nav {
             <span class="tag" style="background:rgba(255,71,87,0.1);color:var(--red)">Avanzado</span>
           </div>
         </div>
-        <div class="exam-card amber-card" onclick="goScreen('exam')" style="animation-delay:0.4s">
+        <div class="exam-card" style="--card-grad:linear-gradient(90deg,var(--amber),var(--pink));animation-delay:0.4s" onclick="goScreen('exam')">
           <div class="card-icon-wrap" style="background:rgba(255,184,0,0.1)">⚙️</div>
           <div class="card-title">Personalizado</div>
           <div class="card-desc">Elige materia, cantidad de preguntas y nivel de dificultad a tu gusto.</div>
@@ -1264,60 +326,28 @@ nav {
         </div>
       </div>
     </div>
-
-    <!-- Brain training -->
     <div class="section-block">
       <div class="section-heading">🧠 Entrenamiento cognitivo</div>
       <div class="brain-cards">
-        <div class="brain-card" onclick="startGame('memoria')" style="animation-delay:0.1s">
-          <span class="brain-icon">🟦</span>
-          <div class="brain-name">Memoria Visual</div>
-          <div class="brain-desc">Recuerda y reproduce secuencias de casillas iluminadas</div>
-          <span class="brain-diff level-med">Medio</span>
-        </div>
-        <div class="brain-card" onclick="startGame('secuencias')" style="animation-delay:0.2s">
-          <span class="brain-icon">🔢</span>
-          <div class="brain-name">Patrones</div>
-          <div class="brain-desc">Encuentra el siguiente número en la secuencia lógica</div>
-          <span class="brain-diff level-easy">Fácil</span>
-        </div>
-        <div class="brain-card" onclick="startGame('stroop')" style="animation-delay:0.3s">
-          <span class="brain-icon">🎨</span>
-          <div class="brain-name">Test Stroop</div>
-          <div class="brain-desc">Concentración e inhibición cognitiva con colores</div>
-          <span class="brain-diff level-hard">Difícil</span>
-        </div>
-        <div class="brain-card" onclick="startGame('logica')" style="animation-delay:0.4s">
-          <span class="brain-icon">🧩</span>
-          <div class="brain-name">Lógica Verbal</div>
-          <div class="brain-desc">Evalúa si las conclusiones son lógicamente válidas</div>
-          <span class="brain-diff level-med">Medio</span>
-        </div>
-        <div class="brain-card" onclick="startGame('mental')" style="animation-delay:0.5s">
-          <span class="brain-icon">⚡</span>
-          <div class="brain-name">Cálculo Mental</div>
-          <div class="brain-desc">Velocidad de procesamiento con operaciones matemáticas</div>
-          <span class="brain-diff level-hard">Difícil</span>
-        </div>
+        <div class="brain-card" onclick="startGame('memoria')" style="animation-delay:0.1s"><span class="brain-icon">🟦</span><div class="brain-name">Memoria Visual</div><div class="brain-desc">Recuerda y reproduce secuencias de casillas iluminadas</div><span class="brain-diff level-med">Medio</span></div>
+        <div class="brain-card" onclick="startGame('secuencias')" style="animation-delay:0.2s"><span class="brain-icon">🔢</span><div class="brain-name">Patrones</div><div class="brain-desc">Encuentra el siguiente número en la secuencia lógica</div><span class="brain-diff level-easy">Fácil</span></div>
+        <div class="brain-card" onclick="startGame('stroop')" style="animation-delay:0.3s"><span class="brain-icon">🎨</span><div class="brain-name">Test Stroop</div><div class="brain-desc">Concentración e inhibición cognitiva con colores</div><span class="brain-diff level-hard">Difícil</span></div>
+        <div class="brain-card" onclick="startGame('logica')" style="animation-delay:0.4s"><span class="brain-icon">🧩</span><div class="brain-name">Lógica Verbal</div><div class="brain-desc">Evalúa si las conclusiones son lógicamente válidas</div><span class="brain-diff level-med">Medio</span></div>
+        <div class="brain-card" onclick="startGame('mental')" style="animation-delay:0.5s"><span class="brain-icon">⚡</span><div class="brain-name">Cálculo Mental</div><div class="brain-desc">Velocidad de procesamiento con operaciones matemáticas</div><span class="brain-diff level-hard">Difícil</span></div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ============================= EXAM SCREEN ============================= -->
+<!-- EXAM -->
 <div id="screen-exam" class="screen">
   <div class="exam-container">
-    <!-- CONFIG -->
     <div id="exam-config">
       <div class="exam-header">
-        <button class="back-link" onclick="goScreen('home')">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          Volver
-        </button>
+        <button class="back-link" onclick="goScreen('home')">← Volver</button>
         <div style="font-family:var(--font-display);font-size:20px;font-weight:700;">Configura tu examen</div>
         <div></div>
       </div>
-
       <div class="config-section">
         <div class="config-label"><span>📚</span> Materia</div>
         <div class="pill-row">
@@ -1328,7 +358,6 @@ nav {
           <button class="pill" data-g="materia" data-v="Inglés" onclick="selPill(this,'purple')">🇺🇸 Inglés</button>
         </div>
       </div>
-
       <div class="config-section">
         <div class="config-label"><span>🔢</span> Cantidad de preguntas</div>
         <div class="pill-row">
@@ -1338,7 +367,6 @@ nav {
           <button class="pill" data-g="cantidad" data-v="50" onclick="selPill(this,'cyan')">50 preguntas</button>
         </div>
       </div>
-
       <div class="config-section">
         <div class="config-label"><span>🎯</span> Nivel de dificultad</div>
         <div class="pill-row">
@@ -1347,55 +375,31 @@ nav {
           <button class="pill" data-g="nivel" data-v="avanzado" onclick="selPill(this,'pink')">🔴 Avanzado</button>
         </div>
       </div>
-
       <div style="text-align:center;margin-top:24px;">
-        <button class="btn btn-cyan btn-lg" onclick="startExam()">
-          Generar examen con IA
-          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 9H15M10 4L15 9L10 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
+        <button class="btn btn-cyan btn-lg" onclick="startExam()">Generar examen con IA →</button>
         <p style="font-size:12px;color:var(--text3);margin-top:12px;">Cada examen es único — la IA genera preguntas nuevas cada vez</p>
       </div>
     </div>
-
-    <!-- LOADING -->
     <div id="exam-loading" style="display:none">
       <div class="loading-state">
         <div class="ai-loader"></div>
         <div class="loading-title">Generando preguntas<span class="loading-dots"><span>.</span><span>.</span><span>.</span></span></div>
-        <div class="loading-sub">La IA está creando tu examen personalizado de <span id="load-materia">Matemáticas</span></div>
+        <div class="loading-sub">Gemini IA está creando tu examen de <span id="load-materia"></span></div>
       </div>
     </div>
-
-    <!-- QUESTION -->
     <div id="exam-question" style="display:none">
       <div class="exam-header">
-        <button class="back-link" onclick="resetExam()">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          Salir
-        </button>
-        <div class="streak-display" id="streak-display" style="display:none">
-          <span class="streak-fire">🔥</span>
-          <span id="streak-num">0</span> racha
-        </div>
-        <div class="q-score-badge">
-          ✓ <span id="live-correct">0</span>&nbsp;correctas
-        </div>
+        <button class="back-link" onclick="resetExam()">← Salir</button>
+        <div class="streak-display" id="streak-display" style="display:none">🔥 <span id="streak-num">0</span> racha</div>
+        <div class="q-score-badge">✓ <span id="live-correct">0</span> correctas</div>
       </div>
-
       <div class="q-progress-wrap">
         <div class="q-progress-info">
           <div class="q-num">Pregunta <span id="q-idx">1</span> / <span id="q-total">10</span></div>
-          <div class="q-materia-badge" id="q-mat-badge">📐 Matemáticas</div>
+          <div class="q-materia-badge" id="q-mat-badge"></div>
         </div>
-        <div class="progress-bar-track">
-          <div class="progress-bar-fill" id="q-pbar" style="width:0%"></div>
-        </div>
+        <div class="progress-bar-track"><div class="progress-bar-fill" id="q-pbar" style="width:0%"></div></div>
       </div>
-
-      <div class="timer-bar-wrap" id="timer-wrap" style="display:none">
-        <div class="timer-bar" id="timer-bar"></div>
-      </div>
-
       <div class="q-card">
         <div class="q-text" id="q-text-content"></div>
         <div class="options-grid" id="q-options-grid"></div>
@@ -1404,62 +408,30 @@ nav {
           <span id="q-exp-text"></span>
         </div>
       </div>
-
       <div class="q-footer">
         <div style="font-size:13px;color:var(--text3)">Selecciona la opción correcta</div>
-        <button class="btn btn-cyan" id="next-btn" onclick="nextQuestion()" style="display:none">
-          Siguiente <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3L11 8L6 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
+        <button class="btn btn-cyan" id="next-btn" onclick="nextQuestion()" style="display:none">Siguiente →</button>
       </div>
     </div>
-
-    <!-- RESULTS -->
     <div id="exam-results" style="display:none">
       <div class="results-screen">
-        <svg class="result-svg" viewBox="0 0 180 180" style="position:absolute;top:0;left:0">
-          <defs>
-            <linearGradient id="resultGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" style="stop-color:var(--cyan)"/>
-              <stop offset="100%" style="stop-color:var(--purple)"/>
-            </linearGradient>
-          </defs>
-          <circle class="result-track" cx="90" cy="90" r="82"/>
-          <circle class="result-fill" id="result-circle" cx="90" cy="90" r="82"
-            stroke-dasharray="515.2" stroke-dashoffset="515.2"/>
-        </svg>
-        <div class="result-circle-wrap" style="position:relative">
+        <div class="result-circle-wrap">
           <svg class="result-svg" viewBox="0 0 180 180">
-            <defs>
-              <linearGradient id="resultGrad2" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" style="stop-color:var(--cyan)"/>
-                <stop offset="100%" style="stop-color:var(--purple)"/>
-              </linearGradient>
-            </defs>
+            <defs><linearGradient id="rg" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:var(--cyan)"/><stop offset="100%" style="stop-color:var(--purple)"/></linearGradient></defs>
             <circle class="result-track" cx="90" cy="90" r="82"/>
-            <circle id="result-arc" class="result-fill" cx="90" cy="90" r="82"
-              stroke-dasharray="515.2" stroke-dashoffset="515.2"
-              stroke="url(#resultGrad2)"/>
+            <circle id="result-arc" cx="90" cy="90" r="82" fill="none" stroke="url(#rg)" stroke-width="8" stroke-linecap="round" stroke-dasharray="515.2" stroke-dashoffset="515.2" style="transition:stroke-dashoffset 1.5s cubic-bezier(0.4,0,0.2,1);transform:rotate(-90deg);transform-origin:center;"/>
           </svg>
           <div class="result-center">
             <div class="result-pct" id="result-pct" style="color:var(--cyan)">0%</div>
             <div class="result-label">puntaje</div>
           </div>
         </div>
-        <div class="result-title" id="result-title">¡Bien hecho!</div>
-        <div class="result-sub" id="result-sub">Sigue practicando para mejorar.</div>
+        <div class="result-title" id="result-title"></div>
+        <div class="result-sub" id="result-sub"></div>
         <div class="result-stats">
-          <div class="rs-item">
-            <div class="rs-val" style="color:var(--green)" id="rs-correct">0</div>
-            <div class="rs-name">Correctas</div>
-          </div>
-          <div class="rs-item">
-            <div class="rs-val" style="color:var(--red)" id="rs-wrong">0</div>
-            <div class="rs-name">Incorrectas</div>
-          </div>
-          <div class="rs-item">
-            <div class="rs-val" style="color:var(--amber)" id="rs-streak">0</div>
-            <div class="rs-name">Mejor racha</div>
-          </div>
+          <div class="rs-item"><div class="rs-val" style="color:var(--green)" id="rs-correct">0</div><div class="rs-name">Correctas</div></div>
+          <div class="rs-item"><div class="rs-val" style="color:var(--red)" id="rs-wrong">0</div><div class="rs-name">Incorrectas</div></div>
+          <div class="rs-item"><div class="rs-val" style="color:var(--amber)" id="rs-streak">0</div><div class="rs-name">Mejor racha</div></div>
         </div>
         <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
           <button class="btn btn-cyan" onclick="resetExam()">Nuevo examen</button>
@@ -1471,70 +443,30 @@ nav {
   </div>
 </div>
 
-<!-- ============================= BRAIN SCREEN ============================= -->
+<!-- BRAIN -->
 <div id="screen-brain" class="screen">
   <div class="brain-container">
-    <!-- MENU -->
     <div id="brain-menu">
       <div style="margin-bottom:32px;">
-        <button class="back-link" onclick="goScreen('home')">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          Volver
-        </button>
+        <button class="back-link" onclick="goScreen('home')">← Volver</button>
         <div style="font-family:var(--font-display);font-size:28px;font-weight:800;margin-top:20px;letter-spacing:-0.5px">Entrenamiento mental 🧠</div>
-        <div style="font-size:15px;color:var(--text2);margin-top:8px;line-height:1.6">Ejercicios científicamente comprobados para mejorar tu rendimiento cognitivo</div>
+        <div style="font-size:15px;color:var(--text2);margin-top:8px;line-height:1.6">Ejercicios para mejorar tu rendimiento cognitivo en el ICFES</div>
       </div>
       <div class="brain-cards" style="grid-template-columns:repeat(auto-fit,minmax(200px,1fr))">
-        <div class="brain-card" onclick="startGame('memoria')">
-          <span class="brain-icon">🟦</span>
-          <div class="brain-name">Memoria Visual</div>
-          <div class="brain-desc">Entrena la memoria de trabajo. Fundamental para lectura crítica y matemáticas.</div>
-          <span class="brain-diff level-med" style="margin-top:10px;">Nivel medio</span>
-        </div>
-        <div class="brain-card" onclick="startGame('secuencias')">
-          <span class="brain-icon">🔢</span>
-          <div class="brain-name">Patrones Numéricos</div>
-          <div class="brain-desc">Razonamiento inductivo. Mejora tu velocidad para detectar patrones en el ICFES.</div>
-          <span class="brain-diff level-easy">Nivel fácil</span>
-        </div>
-        <div class="brain-card" onclick="startGame('stroop')">
-          <span class="brain-icon">🎨</span>
-          <div class="brain-name">Test de Stroop</div>
-          <div class="brain-desc">Inhibición cognitiva y atención selectiva. Fortalece la concentración bajo presión.</div>
-          <span class="brain-diff level-hard">Nivel difícil</span>
-        </div>
-        <div class="brain-card" onclick="startGame('logica')">
-          <span class="brain-icon">🧩</span>
-          <div class="brain-name">Lógica Deductiva</div>
-          <div class="brain-desc">Razonamiento formal. Clave para las preguntas de análisis del ICFES.</div>
-          <span class="brain-diff level-med">Nivel medio</span>
-        </div>
-        <div class="brain-card" onclick="startGame('mental')">
-          <span class="brain-icon">⚡</span>
-          <div class="brain-name">Cálculo Mental</div>
-          <div class="brain-desc">Velocidad de procesamiento numérico. Ahorra tiempo valioso en el examen.</div>
-          <span class="brain-diff level-hard">Nivel difícil</span>
-        </div>
+        <div class="brain-card" onclick="startGame('memoria')"><span class="brain-icon">🟦</span><div class="brain-name">Memoria Visual</div><div class="brain-desc">Entrena la memoria de trabajo. Fundamental para lectura crítica y matemáticas.</div><span class="brain-diff level-med">Nivel medio</span></div>
+        <div class="brain-card" onclick="startGame('secuencias')"><span class="brain-icon">🔢</span><div class="brain-name">Patrones Numéricos</div><div class="brain-desc">Razonamiento inductivo. Mejora tu velocidad para detectar patrones.</div><span class="brain-diff level-easy">Nivel fácil</span></div>
+        <div class="brain-card" onclick="startGame('stroop')"><span class="brain-icon">🎨</span><div class="brain-name">Test de Stroop</div><div class="brain-desc">Inhibición cognitiva y atención selectiva. Concentración bajo presión.</div><span class="brain-diff level-hard">Nivel difícil</span></div>
+        <div class="brain-card" onclick="startGame('logica')"><span class="brain-icon">🧩</span><div class="brain-name">Lógica Deductiva</div><div class="brain-desc">Razonamiento formal. Clave para preguntas de análisis del ICFES.</div><span class="brain-diff level-med">Nivel medio</span></div>
+        <div class="brain-card" onclick="startGame('mental')"><span class="brain-icon">⚡</span><div class="brain-name">Cálculo Mental</div><div class="brain-desc">Velocidad de procesamiento numérico. Ahorra tiempo en el examen.</div><span class="brain-diff level-hard">Nivel difícil</span></div>
       </div>
     </div>
-
-    <!-- GAME -->
     <div id="brain-game" style="display:none">
       <div class="game-header">
-        <button class="back-link" onclick="exitGame()">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          Salir
-        </button>
+        <button class="back-link" onclick="exitGame()">← Salir</button>
         <div class="game-title" id="game-title">Juego</div>
         <div class="game-stats">
-          <div class="game-stat">
-            <span class="gs-icon">⭐</span>
-            <span class="gs-val" id="g-score">0</span>
-          </div>
-          <div class="game-stat">
-            <span class="gs-icon">🔥</span>
-            <span class="gs-val" id="g-streak">0</span>
-          </div>
+          <div class="game-stat"><span>⭐</span><span class="gs-val" id="g-score">0</span></div>
+          <div class="game-stat"><span>🔥</span><span class="gs-val" id="g-streak">0</span></div>
         </div>
       </div>
       <div class="game-card" id="game-content"></div>
@@ -1543,11 +475,16 @@ nav {
 </div>
 
 <script>
-// ============================= NAVIGATION =============================
+// ===== GEMINI API KEY =====
+const GEMINI_KEY = 'AIzaSyDKqu_61kiSwYyRW9J8-DnSknfdQnCMA7E';
+const GEMINI_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=' + GEMINI_KEY;
+
+// ===== STATE =====
 const cfg = { materia: 'Matemáticas', cantidad: '10', nivel: 'intermedio' };
 let questions = [], qIdx = 0, qCorrect = 0, qStreak = 0, qMaxStreak = 0;
 let gScore = 0, gStreak = 0, gRound = 0, gTimer = null, gType = '';
 
+// ===== NAVIGATION =====
 function goScreen(s) {
   document.querySelectorAll('.screen').forEach(x => x.classList.remove('active'));
   document.getElementById('screen-' + s).classList.add('active');
@@ -1566,12 +503,9 @@ function showToast(msg, color) {
   setTimeout(() => t.classList.remove('show'), 2500);
 }
 
-// ============================= PILL SELECTION =============================
 function selPill(el, colorClass) {
   const g = el.dataset.g;
-  document.querySelectorAll(`.pill[data-g="${g}"]`).forEach(p => {
-    p.classList.remove('active','cyan','pink','amber','purple','green');
-  });
+  document.querySelectorAll(`.pill[data-g="${g}"]`).forEach(p => p.classList.remove('active','cyan','pink','amber','purple','green'));
   el.classList.add('active', colorClass);
   cfg[g] = el.dataset.v;
 }
@@ -1582,7 +516,7 @@ function quickStart(materia, cantidad, nivel) {
   setTimeout(() => startExam(), 100);
 }
 
-// ============================= EXAM =============================
+// ===== EXAM =====
 async function startExam() {
   document.getElementById('exam-config').style.display = 'none';
   document.getElementById('exam-loading').style.display = 'block';
@@ -1590,63 +524,59 @@ async function startExam() {
   document.getElementById('exam-results').style.display = 'none';
   document.getElementById('load-materia').textContent = cfg.materia;
 
-  const materiaIcons = {
-    'Matemáticas': '📐', 'Lectura Crítica': '📖',
-    'Ciencias Naturales': '🔬', 'Ciencias Sociales': '🌎', 'Inglés': '🇺🇸'
-  };
+  const prompt = `Eres un experto en el examen ICFES colombiano. Genera exactamente ${cfg.cantidad} preguntas de ${cfg.materia} de nivel ${cfg.nivel}, estilo ICFES real. Las preguntas deben ser variadas, bien redactadas en español colombiano correcto y desafiantes. Para Inglés las preguntas deben ser en inglés.
 
-  const prompt = `Eres un experto en el examen ICFES colombiano. Genera exactamente ${cfg.cantidad} preguntas de ${cfg.materia} de nivel ${cfg.nivel}, estilo ICFES real. Las preguntas deben ser variadas, bien redactadas en español colombiano correcto, y desafiantes. Para Inglés, las preguntas deben ser en inglés.
-
-Responde ÚNICAMENTE con un JSON array válido, sin ningún texto extra, sin bloques markdown. Cada objeto debe tener exactamente estos campos:
-- "pregunta": string con la pregunta completa
-- "opciones": array de exactamente 4 strings (las opciones de respuesta)
-- "correcta": número entre 0 y 3 (índice de la opción correcta)
-- "explicacion": string breve explicando por qué es correcta
-
-Ejemplo de formato:
-[{"pregunta":"¿Cuál...?","opciones":["A","B","C","D"],"correcta":2,"explicacion":"Porque..."}]`;
+Responde ÚNICAMENTE con un JSON array válido sin texto extra ni bloques markdown. Cada objeto debe tener exactamente:
+- "pregunta": string con la pregunta
+- "opciones": array de exactamente 4 strings
+- "correcta": número 0-3 (índice de la opción correcta)
+- "explicacion": string breve explicando por qué es correcta`;
 
   try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
+    const res = await fetch(GEMINI_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 8000,
-        messages: [{ role: 'user', content: prompt }]
+        contents: [{ parts: [{ text: prompt }] }],
+        generationConfig: { temperature: 0.8, maxOutputTokens: 8000 }
       })
     });
+
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.error?.message || 'Error de API');
+    }
+
     const data = await res.json();
-    let txt = data.content.map(x => x.text || '').join('');
-    txt = txt.replace(/```json\s*/g, '').replace(/```\s*/g, '').trim();
-    const start = txt.indexOf('['); const end = txt.lastIndexOf(']');
+    let txt = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+    txt = txt.replace(/```json\s*/g,'').replace(/```\s*/g,'').trim();
+    const start = txt.indexOf('['), end = txt.lastIndexOf(']');
     if (start !== -1 && end !== -1) txt = txt.slice(start, end + 1);
     questions = JSON.parse(txt);
+
+    if (!Array.isArray(questions) || questions.length === 0) throw new Error('Respuesta inválida');
+
     qIdx = 0; qCorrect = 0; qStreak = 0; qMaxStreak = 0;
     document.getElementById('exam-loading').style.display = 'none';
     document.getElementById('exam-question').style.display = 'block';
     document.getElementById('q-total').textContent = questions.length;
-    const icon = materiaIcons[cfg.materia] || '📝';
-    document.getElementById('q-mat-badge').textContent = icon + ' ' + cfg.materia;
-    const mColors = {
-      'Matemáticas': 'rgba(0,229,255,0.1)', 'Lectura Crítica': 'rgba(255,60,172,0.1)',
-      'Ciencias Naturales': 'rgba(0,255,135,0.1)', 'Ciencias Sociales': 'rgba(255,184,0,0.1)', 'Inglés': 'rgba(123,97,255,0.1)'
-    };
-    const mText = {
-      'Matemáticas': 'var(--cyan)', 'Lectura Crítica': 'var(--pink)',
-      'Ciencias Naturales': 'var(--green)', 'Ciencias Sociales': 'var(--amber)', 'Inglés': 'var(--purple)'
-    };
+
+    const icons = {'Matemáticas':'📐','Lectura Crítica':'📖','Ciencias Naturales':'🔬','Ciencias Sociales':'🌎','Inglés':'🇺🇸'};
+    const colors = {'Matemáticas':'rgba(0,229,255,0.1)','Lectura Crítica':'rgba(255,60,172,0.1)','Ciencias Naturales':'rgba(0,255,135,0.1)','Ciencias Sociales':'rgba(255,184,0,0.1)','Inglés':'rgba(123,97,255,0.1)'};
+    const tcolors = {'Matemáticas':'var(--cyan)','Lectura Crítica':'var(--pink)','Ciencias Naturales':'var(--green)','Ciencias Sociales':'var(--amber)','Inglés':'var(--purple)'};
     const badge = document.getElementById('q-mat-badge');
-    badge.style.background = mColors[cfg.materia] || 'rgba(0,229,255,0.1)';
-    badge.style.color = mText[cfg.materia] || 'var(--cyan)';
+    badge.textContent = (icons[cfg.materia] || '📝') + ' ' + cfg.materia;
+    badge.style.background = colors[cfg.materia] || 'rgba(0,229,255,0.1)';
+    badge.style.color = tcolors[cfg.materia] || 'var(--cyan)';
     renderQuestion();
   } catch(e) {
     document.getElementById('exam-loading').innerHTML = `
       <div class="loading-state">
-        <div style="font-size:40px;margin-bottom:16px">⚠️</div>
+        <div style="font-size:48px;margin-bottom:16px">⚠️</div>
         <div class="loading-title" style="color:var(--red)">Error al generar</div>
-        <div class="loading-sub" style="margin-bottom:24px">Verifica tu conexión a internet e intenta de nuevo.</div>
-        <button class="btn btn-ghost" onclick="resetExam()">Volver</button>
+        <div class="loading-sub" style="margin-bottom:8px">${e.message || 'Problema de conexión'}</div>
+        <div class="loading-sub" style="margin-bottom:24px;font-size:12px">Verifica que la API Key sea correcta y tengas conexión a internet.</div>
+        <button class="btn btn-ghost" onclick="resetExam()">← Volver</button>
       </div>`;
   }
 }
@@ -1660,13 +590,8 @@ function renderQuestion() {
   document.getElementById('live-correct').textContent = qCorrect;
   document.getElementById('q-explanation').style.display = 'none';
   document.getElementById('next-btn').style.display = 'none';
-
-  const streakEl = document.getElementById('streak-display');
-  if (qStreak >= 3) {
-    streakEl.style.display = 'flex';
-    document.getElementById('streak-num').textContent = qStreak;
-  } else { streakEl.style.display = 'none'; }
-
+  const sd = document.getElementById('streak-display');
+  if (qStreak >= 3) { sd.style.display = 'flex'; document.getElementById('streak-num').textContent = qStreak; } else sd.style.display = 'none';
   const letters = ['A','B','C','D'];
   const grid = document.getElementById('q-options-grid');
   grid.innerHTML = '';
@@ -1681,50 +606,33 @@ function renderQuestion() {
 
 function answerQ(i, btn) {
   const q = questions[qIdx];
-  const btns = document.querySelectorAll('.option-btn');
-  btns.forEach(b => b.disabled = true);
-
+  document.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
   if (i === q.correcta) {
     btn.classList.add('correct');
-    qCorrect++;
-    qStreak++;
+    qCorrect++; qStreak++;
     if (qStreak > qMaxStreak) qMaxStreak = qStreak;
     document.getElementById('live-correct').textContent = qCorrect;
     if (qStreak === 3) showToast('🔥 ¡3 seguidas!', 'var(--amber)');
     if (qStreak === 5) showToast('🔥🔥 ¡Racha de 5!', 'var(--amber)');
-    if (qStreak === 10) showToast('🏆 ¡Racha perfecta de 10!', 'var(--cyan)');
+    if (qStreak === 10) showToast('🏆 ¡Racha de 10! ¡Eres una bestia!', 'var(--cyan)');
   } else {
     btn.classList.add('wrong');
-    btns[q.correcta].classList.add('correct');
+    document.querySelectorAll('.option-btn')[q.correcta].classList.add('correct');
     qStreak = 0;
   }
-
-  const expCard = document.getElementById('q-explanation');
   document.getElementById('q-exp-text').textContent = q.explicacion;
-  expCard.style.display = 'block';
-
-  const nextBtn = document.getElementById('next-btn');
-  nextBtn.style.display = 'inline-flex';
-  nextBtn.textContent = qIdx < questions.length - 1 ? 'Siguiente' : 'Ver resultados';
-  nextBtn.innerHTML = qIdx < questions.length - 1
-    ? 'Siguiente <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3L11 8L6 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
-    : '🎉 Ver resultados';
-
-  const streakEl = document.getElementById('streak-display');
-  if (qStreak >= 3) {
-    streakEl.style.display = 'flex';
-    document.getElementById('streak-num').textContent = qStreak;
-  } else { streakEl.style.display = 'none'; }
+  document.getElementById('q-explanation').style.display = 'block';
+  const nb = document.getElementById('next-btn');
+  nb.style.display = 'inline-flex';
+  nb.textContent = qIdx < questions.length - 1 ? 'Siguiente →' : '🎉 Ver resultados';
+  const sd = document.getElementById('streak-display');
+  if (qStreak >= 3) { sd.style.display = 'flex'; document.getElementById('streak-num').textContent = qStreak; } else sd.style.display = 'none';
 }
 
 function nextQuestion() {
   qIdx++;
-  if (qIdx >= questions.length) {
-    showResults();
-  } else {
-    document.getElementById('q-options-grid').innerHTML = '';
-    renderQuestion();
-  }
+  if (qIdx >= questions.length) showResults();
+  else renderQuestion();
 }
 
 function showResults() {
@@ -1732,24 +640,19 @@ function showResults() {
   document.getElementById('exam-results').style.display = 'block';
   const total = questions.length;
   const pct = Math.round((qCorrect / total) * 100);
-
   document.getElementById('result-pct').textContent = pct + '%';
   document.getElementById('rs-correct').textContent = qCorrect;
   document.getElementById('rs-wrong').textContent = total - qCorrect;
   document.getElementById('rs-streak').textContent = qMaxStreak;
-
   const arc = document.getElementById('result-arc');
-  const circ = 2 * Math.PI * 82;
-  const offset = circ - (pct / 100) * circ;
+  const offset = 515.2 - (pct / 100) * 515.2;
   setTimeout(() => { arc.style.strokeDashoffset = offset; }, 100);
-
   let title, sub, color;
-  if (pct >= 90) { title = '¡Eres una máquina! 🏆'; sub = 'Resultado increíble. Estás listo para el ICFES. ¡Sigue así!'; color = 'var(--cyan)'; }
-  else if (pct >= 75) { title = '¡Excelente trabajo! 🌟'; sub = 'Muy buen puntaje. Repasa los temas donde fallaste y lo clavas.'; color = 'var(--green)'; }
-  else if (pct >= 60) { title = 'Vas por buen camino 👍'; sub = 'Resultado aceptable. Practica más y llegarás al nivel que quieres.'; color = 'var(--amber)'; }
-  else if (pct >= 40) { title = 'Necesitas repasar 📚'; sub = 'No te rindas. Entrena tu mente y vuelve a intentarlo. ¡Tú puedes!'; color = 'var(--pink)'; }
-  else { title = 'A practicar más 💪'; sub = 'El ICFES se gana con práctica constante. Empieza por los juegos cognitivos.'; color = 'var(--red)'; }
-
+  if (pct >= 90) { title='¡Eres una máquina! 🏆'; sub='Resultado increíble. Estás listo para el ICFES.'; color='var(--cyan)'; }
+  else if (pct >= 75) { title='¡Excelente trabajo! 🌟'; sub='Muy buen puntaje. Repasa los temas donde fallaste.'; color='var(--green)'; }
+  else if (pct >= 60) { title='Vas por buen camino 👍'; sub='Resultado aceptable. Practica más y lo clavas.'; color='var(--amber)'; }
+  else if (pct >= 40) { title='Necesitas repasar 📚'; sub='No te rindas. Entrena tu mente y vuelve a intentarlo.'; color='var(--pink)'; }
+  else { title='A practicar más 💪'; sub='El ICFES se gana con constancia. ¡Empieza de nuevo!'; color='var(--red)'; }
   document.getElementById('result-title').textContent = title;
   document.getElementById('result-sub').textContent = sub;
   document.getElementById('result-pct').style.color = color;
@@ -1764,21 +667,15 @@ function resetExam() {
   document.getElementById('exam-results').style.display = 'none';
 }
 
-// ============================= BRAIN GAMES =============================
-const GAME_NAMES = {
-  memoria: 'Memoria Visual 🟦',
-  secuencias: 'Patrones Numéricos 🔢',
-  stroop: 'Test de Stroop 🎨',
-  logica: 'Lógica Deductiva 🧩',
-  mental: 'Cálculo Mental ⚡'
-};
+// ===== BRAIN GAMES =====
+const GAME_NAMES = { memoria:'Memoria Visual 🟦', secuencias:'Patrones Numéricos 🔢', stroop:'Test de Stroop 🎨', logica:'Lógica Deductiva 🧩', mental:'Cálculo Mental ⚡' };
 
 function startGame(type) {
   gType = type; gScore = 0; gStreak = 0; gRound = 0;
   document.getElementById('brain-menu').style.display = 'none';
   document.getElementById('brain-game').style.display = 'block';
   document.getElementById('game-title').textContent = GAME_NAMES[type];
-  updateGameStats();
+  updateGStats();
   if (gTimer) clearTimeout(gTimer);
   renderGame();
   goScreen('brain');
@@ -1790,175 +687,126 @@ function exitGame() {
   document.getElementById('brain-game').style.display = 'none';
 }
 
-function updateGameStats() {
+function updateGStats() {
   document.getElementById('g-score').textContent = gScore;
   document.getElementById('g-streak').textContent = gStreak;
 }
 
 function renderGame() {
-  if (gType === 'memoria') renderMemoria();
-  else if (gType === 'secuencias') renderSecuencias();
-  else if (gType === 'stroop') renderStroop();
-  else if (gType === 'logica') renderLogica();
-  else if (gType === 'mental') renderMental();
+  if (gType==='memoria') renderMemoria();
+  else if (gType==='secuencias') renderSecuencias();
+  else if (gType==='stroop') renderStroop();
+  else if (gType==='logica') renderLogica();
+  else if (gType==='mental') renderMental();
 }
 
-// ---- MEMORIA ----
-let memSeq = [], memUserSel = [], memPhase = 'show', memSize = 0;
+// MEMORIA
+let memSeq=[], memUserSel=[], memPhase='show';
 function renderMemoria() {
   const gc = document.getElementById('game-content');
-  memSize = Math.min(3 + Math.floor(gRound / 4), 5);
-  const cells = memSize * memSize;
-  const litCount = Math.min(3 + Math.floor(gRound / 2), Math.floor(cells * 0.55));
-  memSeq = []; memUserSel = []; memPhase = 'show';
-  while (memSeq.length < litCount) {
-    const r = Math.floor(Math.random() * cells);
-    if (!memSeq.includes(r)) memSeq.push(r);
-  }
-  const colors = ['lit', 'lit', 'lit-pink', 'lit'];
-  const cellColor = colors[gRound % colors.length];
-
-  gc.innerHTML = `
-    <p class="game-instruction">Memoriza las casillas iluminadas y luego reprodúcelas</p>
-    <div class="round-indicator" id="mem-rounds">${Array.from({length:Math.min(gRound+1,10)},(_,i)=>`<div class="round-dot ${i<gRound?'done':i===gRound?'current':''}"></div>`).join('')}</div>
-    <div class="memory-grid" id="mem-grid" style="grid-template-columns:repeat(${memSize},60px)">
-      ${Array.from({length:cells},(_,i)=>`<div class="mem-cell ${memSeq.includes(i)?cellColor:''}" data-i="${i}"></div>`).join('')}
-    </div>
-    <p id="mem-msg" style="font-size:14px;color:var(--text2);text-align:center;margin-top:16px">Observa...</p>`;
-
-  gTimer = setTimeout(() => {
-    const cells2 = document.querySelectorAll('.mem-cell');
-    cells2.forEach(c => c.classList.remove('lit','lit-pink'));
-    memPhase = 'select';
-    document.getElementById('mem-msg').textContent = `Selecciona ${litCount} casilla${litCount > 1 ? 's' : ''}`;
-    cells2.forEach(c => { c.onclick = () => memTap(c, litCount); c.style.cursor = 'pointer'; });
-  }, Math.max(1000, 2000 - gRound * 50));
+  const sz = Math.min(3 + Math.floor(gRound/4), 5);
+  const cells = sz * sz;
+  const litCount = Math.min(3 + Math.floor(gRound/2), Math.floor(cells*0.55));
+  memSeq=[]; memUserSel=[]; memPhase='show';
+  while(memSeq.length < litCount){ const r=Math.floor(Math.random()*cells); if(!memSeq.includes(r)) memSeq.push(r); }
+  const cellColor = gRound%2===0 ? 'lit' : 'lit-pink';
+  const dots = Array.from({length:Math.min(gRound+1,10)},(_,i)=>`<div class="round-dot ${i<gRound?'done':i===gRound?'current':''}"></div>`).join('');
+  gc.innerHTML=`<p class="game-instruction">Memoriza las casillas iluminadas y luego reprodúcelas</p>
+  <div class="round-indicator">${dots}</div>
+  <div class="memory-grid" id="mem-grid" style="grid-template-columns:repeat(${sz},60px)">
+    ${Array.from({length:cells},(_,i)=>`<div class="mem-cell ${memSeq.includes(i)?cellColor:''}" data-i="${i}"></div>`).join('')}
+  </div>
+  <p id="mem-msg" style="font-size:14px;color:var(--text2);text-align:center;margin-top:16px">Observa bien...</p>`;
+  gTimer = setTimeout(()=>{
+    document.querySelectorAll('.mem-cell').forEach(c=>c.classList.remove('lit','lit-pink'));
+    memPhase='select';
+    document.getElementById('mem-msg').textContent=`Selecciona ${litCount} casilla${litCount>1?'s':''}`;
+    document.querySelectorAll('.mem-cell').forEach(c=>{ c.onclick=()=>memTap(c,litCount); c.style.cursor='pointer'; });
+  }, Math.max(1000, 2000-gRound*50));
 }
 
 function memTap(c, litCount) {
-  if (memPhase !== 'select') return;
-  const i = parseInt(c.dataset.i);
-  if (memUserSel.includes(i)) return;
-  memUserSel.push(i);
-  c.classList.add('selected');
-
-  if (memUserSel.length === litCount) {
-    memPhase = 'done';
-    const allCorrect = memUserSel.every(x => memSeq.includes(x)) && memSeq.every(x => memUserSel.includes(x));
-    document.querySelectorAll('.mem-cell').forEach(c2 => {
-      const idx = parseInt(c2.dataset.i);
-      c2.onclick = null; c2.style.cursor = 'default';
-      if (memSeq.includes(idx)) c2.classList.add('hit');
-      else if (memUserSel.includes(idx) && !memSeq.includes(idx)) c2.classList.add('miss');
+  if(memPhase!=='select') return;
+  const i=parseInt(c.dataset.i);
+  if(memUserSel.includes(i)) return;
+  memUserSel.push(i); c.classList.add('selected');
+  if(memUserSel.length===litCount){
+    memPhase='done';
+    const ok = memUserSel.every(x=>memSeq.includes(x)) && memSeq.every(x=>memUserSel.includes(x));
+    document.querySelectorAll('.mem-cell').forEach(c2=>{
+      const idx=parseInt(c2.dataset.i); c2.onclick=null; c2.style.cursor='default';
+      if(memSeq.includes(idx)) c2.classList.add('hit');
+      else if(memUserSel.includes(idx)&&!memSeq.includes(idx)) c2.classList.add('miss');
     });
-    if (allCorrect) {
-      gScore += 10 + gRound * 2; gStreak++;
-      if (gStreak === 3) showToast('🔥 ¡Racha de 3!', 'var(--amber)');
-      document.getElementById('mem-msg').innerHTML = `<span style="color:var(--green);font-weight:600">¡Perfecto! +${10 + gRound * 2} pts</span>`;
-    } else {
-      gStreak = 0;
-      document.getElementById('mem-msg').innerHTML = `<span style="color:var(--red);font-weight:600">Incorrecto</span>`;
-    }
-    gRound++; updateGameStats();
-    gTimer = setTimeout(() => renderGame(), 1800);
+    if(ok){ gScore+=10+gRound*2; gStreak++; if(gStreak===3) showToast('🔥 ¡Racha de 3!','var(--amber)');
+      document.getElementById('mem-msg').innerHTML=`<span style="color:var(--green);font-weight:600">¡Perfecto! +${10+gRound*2} pts</span>`;
+    } else { gStreak=0; document.getElementById('mem-msg').innerHTML=`<span style="color:var(--red);font-weight:600">Incorrecto</span>`; }
+    gRound++; updateGStats();
+    gTimer=setTimeout(()=>renderGame(), 1800);
   }
 }
 
-// ---- SECUENCIAS ----
-const SEQ_DB = [
-  {seq:[2,4,6,8],ans:10,opts:[9,10,11,12],rule:'Suma +2'},
-  {seq:[1,3,9,27],ans:81,opts:[54,81,63,90]},
-  {seq:[100,50,25],ans:12,opts:[10,12,15,20]},
-  {seq:[1,1,2,3,5],ans:8,opts:[7,8,9,10]},
-  {seq:[3,6,12,24],ans:48,opts:[36,42,48,52]},
-  {seq:[10,9,7,4],ans:0,opts:[-1,0,1,2]},
-  {seq:[5,10,20,40],ans:80,opts:[60,75,80,85]},
-  {seq:[2,5,10,17,26],ans:37,opts:[33,35,37,39]},
-  {seq:[1,4,9,16],ans:25,opts:[20,24,25,26]},
-  {seq:[64,32,16,8],ans:4,opts:[2,3,4,6]},
-  {seq:[1,2,6,24],ans:120,opts:[48,60,100,120]},
-  {seq:[3,5,8,13],ans:21,opts:[18,19,20,21]},
-  {seq:[7,14,21,28],ans:35,opts:[30,32,35,42]},
-  {seq:[2,3,5,7,11],ans:13,opts:[12,13,14,15]},
+// SECUENCIAS
+const SEQ_DB=[
+  {seq:[2,4,6,8],ans:10,opts:[9,10,11,12]},{seq:[1,3,9,27],ans:81,opts:[54,81,63,90]},
+  {seq:[100,50,25],ans:12,opts:[10,12,15,20]},{seq:[1,1,2,3,5],ans:8,opts:[7,8,9,10]},
+  {seq:[3,6,12,24],ans:48,opts:[36,42,48,52]},{seq:[10,9,7,4],ans:0,opts:[-1,0,1,2]},
+  {seq:[5,10,20,40],ans:80,opts:[60,75,80,85]},{seq:[2,5,10,17,26],ans:37,opts:[33,35,37,39]},
+  {seq:[1,4,9,16],ans:25,opts:[20,24,25,26]},{seq:[64,32,16,8],ans:4,opts:[2,3,4,6]},
+  {seq:[1,2,6,24],ans:120,opts:[48,60,100,120]},{seq:[3,5,8,13],ans:21,opts:[18,19,20,21]},
+  {seq:[7,14,21,28],ans:35,opts:[30,32,35,42]},{seq:[2,3,5,7,11],ans:13,opts:[12,13,14,15]},
   {seq:[1,8,27,64],ans:125,opts:[100,108,125,144]},
 ];
-
-function renderSecuencias() {
-  const gc = document.getElementById('game-content');
-  const d = SEQ_DB[gRound % SEQ_DB.length];
-  const opts = [...d.opts].sort(() => Math.random() - 0.5);
-
-  gc.innerHTML = `
-    <p class="game-instruction">¿Cuál es el siguiente número en la secuencia?</p>
-    <div class="seq-display">
-      ${d.seq.map(n => `<div class="seq-num">${n}</div><div class="seq-arrow">→</div>`).join('')}
-      <div class="seq-question">?</div>
-    </div>
-    <div class="seq-options">
-      ${opts.map(o => `<button class="seq-opt" onclick="checkSeq(this,${o},${d.ans})">${o}</button>`).join('')}
-    </div>
-    <div id="seq-fb" style="margin-top:16px;min-height:40px;text-align:center"></div>`;
+function renderSecuencias(){
+  const gc=document.getElementById('game-content');
+  const d=SEQ_DB[gRound%SEQ_DB.length];
+  const opts=[...d.opts].sort(()=>Math.random()-0.5);
+  gc.innerHTML=`<p class="game-instruction">¿Cuál es el siguiente número en la secuencia?</p>
+  <div class="seq-display">${d.seq.map(n=>`<div class="seq-num">${n}</div><div class="seq-arrow">→</div>`).join('')}<div class="seq-question">?</div></div>
+  <div class="seq-options">${opts.map(o=>`<button class="seq-opt" onclick="checkSeq(this,${o},${d.ans})">${o}</button>`).join('')}</div>
+  <div id="seq-fb" style="margin-top:16px;min-height:40px;text-align:center"></div>`;
+}
+function checkSeq(btn,val,ans){
+  document.querySelectorAll('.seq-opt').forEach(b=>b.disabled=true);
+  const ok=val===ans; btn.classList.add(ok?'correct':'wrong');
+  if(!ok) document.querySelectorAll('.seq-opt').forEach(b=>{if(parseInt(b.textContent)===ans)b.classList.add('correct');});
+  if(ok){gScore+=10;gStreak++;}else gStreak=0;
+  gRound++; updateGStats();
+  document.getElementById('seq-fb').innerHTML=ok?`<span class="feedback-msg feedback-ok">¡Correcto! +10 pts</span>`:`<span class="feedback-msg feedback-err">Era ${ans}</span>`;
+  gTimer=setTimeout(()=>renderGame(),1500);
 }
 
-function checkSeq(btn, val, ans) {
-  document.querySelectorAll('.seq-opt').forEach(b => b.disabled = true);
-  const ok = val === ans;
-  btn.classList.add(ok ? 'correct' : 'wrong');
-  if (!ok) document.querySelectorAll('.seq-opt').forEach(b => { if (parseInt(b.textContent) === ans) b.classList.add('correct'); });
-  if (ok) { gScore += 10; gStreak++; } else gStreak = 0;
-  gRound++; updateGameStats();
-  document.getElementById('seq-fb').innerHTML = ok
-    ? `<span class="feedback-msg feedback-ok">¡Correcto! +10 pts</span>`
-    : `<span class="feedback-msg feedback-err">Era ${ans}</span>`;
-  gTimer = setTimeout(() => renderGame(), 1500);
-}
-
-// ---- STROOP ----
-const STROOP_DB = [
-  {word:'ROJO',color:'#FF4757',colorName:'Rojo'},
-  {word:'AZUL',color:'#378ADD',colorName:'Azul'},
-  {word:'VERDE',color:'#00FF87',colorName:'Verde'},
-  {word:'AMARILLO',color:'#FFB800',colorName:'Amarillo'},
-  {word:'MORADO',color:'#7B61FF',colorName:'Morado'},
-  {word:'ROJO',color:'#00FF87',colorName:'Verde'},
-  {word:'VERDE',color:'#FF4757',colorName:'Rojo'},
-  {word:'AZUL',color:'#FFB800',colorName:'Amarillo'},
-  {word:'AMARILLO',color:'#7B61FF',colorName:'Morado'},
-  {word:'MORADO',color:'#378ADD',colorName:'Azul'},
-  {word:'AZUL',color:'#00FF87',colorName:'Verde'},
-  {word:'ROJO',color:'#7B61FF',colorName:'Morado'},
+// STROOP
+const STROOP_DB=[
+  {word:'ROJO',color:'#FF4757',colorName:'Rojo'},{word:'AZUL',color:'#378ADD',colorName:'Azul'},
+  {word:'VERDE',color:'#00FF87',colorName:'Verde'},{word:'AMARILLO',color:'#FFB800',colorName:'Amarillo'},
+  {word:'MORADO',color:'#7B61FF',colorName:'Morado'},{word:'ROJO',color:'#00FF87',colorName:'Verde'},
+  {word:'VERDE',color:'#FF4757',colorName:'Rojo'},{word:'AZUL',color:'#FFB800',colorName:'Amarillo'},
+  {word:'AMARILLO',color:'#7B61FF',colorName:'Morado'},{word:'MORADO',color:'#378ADD',colorName:'Azul'},
+  {word:'AZUL',color:'#00FF87',colorName:'Verde'},{word:'ROJO',color:'#7B61FF',colorName:'Morado'},
 ];
-const STROOP_COLORS = ['Rojo','Azul','Verde','Amarillo','Morado'];
-
-function renderStroop() {
-  const gc = document.getElementById('game-content');
-  const d = STROOP_DB[Math.floor(Math.random() * STROOP_DB.length)];
-  const colorOptions = [...STROOP_COLORS].sort(() => Math.random() - 0.5);
-
-  gc.innerHTML = `
-    <p class="stroop-instruction">Selecciona el <strong style="color:var(--cyan)">COLOR</strong> en que está escrita la palabra<br><span style="color:var(--text3);font-size:12px">Ignora lo que dice, fíjate en el color</span></p>
-    <div class="stroop-word" style="color:${d.color}">${d.word}</div>
-    <div class="color-btns">
-      ${colorOptions.map(c => `<button class="color-btn" data-c="${c}" onclick="checkStroop(this,'${c}','${d.colorName}')">${c}</button>`).join('')}
-    </div>
-    <div id="stroop-fb" style="margin-top:20px;min-height:40px;text-align:center"></div>`;
+const STROOP_COLORS=['Rojo','Azul','Verde','Amarillo','Morado'];
+function renderStroop(){
+  const gc=document.getElementById('game-content');
+  const d=STROOP_DB[Math.floor(Math.random()*STROOP_DB.length)];
+  const opts=[...STROOP_COLORS].sort(()=>Math.random()-0.5);
+  gc.innerHTML=`<p class="game-instruction">Selecciona el <strong style="color:var(--cyan)">COLOR</strong> en que está escrita la palabra<br><span style="color:var(--text3);font-size:12px">Ignora lo que dice, fíjate en el color</span></p>
+  <div class="stroop-word" style="color:${d.color}">${d.word}</div>
+  <div class="color-btns">${opts.map(c=>`<button class="color-btn" data-c="${c}" onclick="checkStroop(this,'${c}','${d.colorName}')">${c}</button>`).join('')}</div>
+  <div id="stroop-fb" style="margin-top:20px;min-height:40px;text-align:center"></div>`;
+}
+function checkStroop(btn,chosen,correct){
+  document.querySelectorAll('.color-btn').forEach(b=>b.disabled=true);
+  const ok=chosen===correct; btn.classList.add(ok?'correct':'wrong');
+  if(!ok) document.querySelectorAll('.color-btn').forEach(b=>{if(b.dataset.c===correct)b.classList.add('correct');});
+  if(ok){gScore+=10;gStreak++;}else gStreak=0;
+  gRound++; updateGStats();
+  document.getElementById('stroop-fb').innerHTML=ok?`<span class="feedback-msg feedback-ok">¡Excelente! Era ${correct}</span>`:`<span class="feedback-msg feedback-err">Era ${correct}</span>`;
+  gTimer=setTimeout(()=>renderGame(),1600);
 }
 
-function checkStroop(btn, chosen, correct) {
-  document.querySelectorAll('.color-btn').forEach(b => b.disabled = true);
-  const ok = chosen === correct;
-  btn.classList.add(ok ? 'correct' : 'wrong');
-  if (!ok) document.querySelectorAll('.color-btn').forEach(b => { if (b.dataset.c === correct) b.classList.add('correct'); });
-  if (ok) { gScore += 10; gStreak++; } else gStreak = 0;
-  gRound++; updateGameStats();
-  document.getElementById('stroop-fb').innerHTML = ok
-    ? `<span class="feedback-msg feedback-ok">¡Excelente! El color era ${correct}</span>`
-    : `<span class="feedback-msg feedback-err">Era ${correct}</span>`;
-  gTimer = setTimeout(() => renderGame(), 1600);
-}
-
-// ---- LOGICA ----
-const LOGIC_DB = [
+// LOGICA
+const LOGIC_DB=[
   {premises:['Todos los mamíferos son animales.','Los perros son mamíferos.'],conclusion:'Por lo tanto, los perros son animales.',valid:true},
   {premises:['Si llueve, la calle se moja.','La calle está mojada.'],conclusion:'Por lo tanto, llovió.',valid:false},
   {premises:['Ningún pez es mamífero.','Las ballenas son mamíferos.'],conclusion:'Por lo tanto, las ballenas no son peces.',valid:true},
@@ -1972,97 +820,54 @@ const LOGIC_DB = [
   {premises:['Todos los colombianos son latinoamericanos.','Sofía es colombiana.'],conclusion:'Por lo tanto, Sofía es latinoamericana.',valid:true},
   {premises:['Algunos políticos son honestos.','Carlos es político.'],conclusion:'Por lo tanto, Carlos es honesto.',valid:false},
 ];
-
-function renderLogica() {
-  const gc = document.getElementById('game-content');
-  const d = LOGIC_DB[gRound % LOGIC_DB.length];
-
-  gc.innerHTML = `
-    <p class="game-instruction" style="margin-bottom:16px">¿La conclusión se sigue lógicamente de las premisas?</p>
-    <div class="logic-premise" style="width:100%">
-      ${d.premises.map((p, i) => `<div class="premise-row"><span class="premise-num">P${i+1}</span>${p}</div>`).join('')}
-    </div>
-    <div class="logic-conclusion" style="width:100%">
-      <span class="logic-label">Conclusión</span>
-      ${d.conclusion}
-    </div>
-    <div class="tf-row">
-      <button class="tf-btn valid" onclick="checkLogica(this,true,${d.valid})">✓ Válida</button>
-      <button class="tf-btn invalid" onclick="checkLogica(this,false,${d.valid})">✗ Inválida</button>
-    </div>
-    <div id="logic-fb" style="margin-top:16px;min-height:40px;text-align:center"></div>`;
+function renderLogica(){
+  const gc=document.getElementById('game-content');
+  const d=LOGIC_DB[gRound%LOGIC_DB.length];
+  gc.innerHTML=`<p class="game-instruction">¿La conclusión se sigue lógicamente de las premisas?</p>
+  <div class="logic-premise">${d.premises.map((p,i)=>`<div class="premise-row"><span class="premise-num">P${i+1}</span>${p}</div>`).join('')}</div>
+  <div class="logic-conclusion"><span class="logic-label">Conclusión</span>${d.conclusion}</div>
+  <div class="tf-row">
+    <button class="tf-btn valid" onclick="checkLogica(this,true,${d.valid})">✓ Válida</button>
+    <button class="tf-btn invalid" onclick="checkLogica(this,false,${d.valid})">✗ Inválida</button>
+  </div>
+  <div id="logic-fb" style="margin-top:16px;min-height:40px;text-align:center"></div>`;
+}
+function checkLogica(btn,val,ans){
+  document.querySelectorAll('.tf-btn').forEach(b=>b.disabled=true);
+  const ok=val===ans; btn.classList.add(ok?'correct':'wrong');
+  if(!ok) document.querySelectorAll('.tf-btn').forEach(b=>{const isOk=(b.classList.contains('valid')&&ans)||(b.classList.contains('invalid')&&!ans);if(isOk)b.classList.add('correct');});
+  if(ok){gScore+=10;gStreak++;}else gStreak=0;
+  gRound++; updateGStats();
+  document.getElementById('logic-fb').innerHTML=ok?`<span class="feedback-msg feedback-ok">¡Correcto! +10 pts</span>`:`<span class="feedback-msg feedback-err">Era ${ans?'Válida':'Inválida'}</span>`;
+  gTimer=setTimeout(()=>renderGame(),2000);
 }
 
-function checkLogica(btn, val, ans) {
-  document.querySelectorAll('.tf-btn').forEach(b => b.disabled = true);
-  const ok = val === ans;
-  btn.classList.add(ok ? 'correct' : 'wrong');
-  if (!ok) document.querySelectorAll('.tf-btn').forEach(b => {
-    const isCorrectBtn = (b.classList.contains('valid') && ans) || (b.classList.contains('invalid') && !ans);
-    if (isCorrectBtn) b.classList.add('correct');
-  });
-  if (ok) { gScore += 10; gStreak++; } else gStreak = 0;
-  gRound++; updateGameStats();
-  document.getElementById('logic-fb').innerHTML = ok
-    ? `<span class="feedback-msg feedback-ok">¡Correcto! +10 pts</span>`
-    : `<span class="feedback-msg feedback-err">Era ${ans ? 'Válida' : 'Inválida'}</span>`;
-  gTimer = setTimeout(() => renderGame(), 2000);
+// MENTAL MATH
+function renderMental(){
+  const gc=document.getElementById('game-content');
+  const ops=['+','-','×']; const diff=Math.floor(gRound/5);
+  const op=diff===0?ops[Math.floor(Math.random()*2)]:ops[Math.floor(Math.random()*3)];
+  let a,b,ans;
+  if(op==='+'){a=Math.floor(Math.random()*(20+diff*15))+5;b=Math.floor(Math.random()*(20+diff*15))+5;ans=a+b;}
+  else if(op==='-'){a=Math.floor(Math.random()*(30+diff*20))+15;b=Math.floor(Math.random()*a)+1;ans=a-b;}
+  else{a=Math.floor(Math.random()*(6+diff*3))+2;b=Math.floor(Math.random()*(6+diff*3))+2;ans=a*b;}
+  const wrongs=new Set();
+  while(wrongs.size<3){const w=ans+(Math.floor(Math.random()*16)-8);if(w!==ans&&w>0)wrongs.add(w);}
+  const opts=[...wrongs,ans].sort(()=>Math.random()-0.5);
+  gc.innerHTML=`<p class="game-instruction">Resuelve lo más rápido que puedas</p>
+  <div class="math-problem"><span>${a}</span> <span class="math-op">${op}</span> <span>${b}</span> <span style="color:var(--text2)">=</span> <span style="color:var(--cyan)">?</span></div>
+  <div class="math-opts">${opts.map(o=>`<button class="math-opt" onclick="checkMental(this,${o},${ans})">${o}</button>`).join('')}</div>
+  <div id="mental-fb" style="margin-top:16px;min-height:40px;text-align:center;width:100%"></div>`;
 }
-
-// ---- MENTAL MATH ----
-function renderMental() {
-  const gc = document.getElementById('game-content');
-  const ops = ['+', '-', '×'];
-  let op, a, b, ans;
-  const diff = Math.floor(gRound / 5);
-  if (diff === 0) op = ops[Math.floor(Math.random() * 2)];
-  else op = ops[Math.floor(Math.random() * 3)];
-
-  if (op === '+') {
-    a = Math.floor(Math.random() * (20 + diff * 15)) + 5;
-    b = Math.floor(Math.random() * (20 + diff * 15)) + 5;
-    ans = a + b;
-  } else if (op === '-') {
-    a = Math.floor(Math.random() * (30 + diff * 20)) + 15;
-    b = Math.floor(Math.random() * a) + 1;
-    ans = a - b;
-  } else {
-    a = Math.floor(Math.random() * (6 + diff * 3)) + 2;
-    b = Math.floor(Math.random() * (6 + diff * 3)) + 2;
-    ans = a * b;
-  }
-
-  const wrongs = new Set();
-  while (wrongs.size < 3) {
-    const offsets = [-ans+1, ans-2, ans+3, ans-5, ans+7, ans-3, ans+2].filter(x => x !== ans && x > 0);
-    const w = offsets[Math.floor(Math.random() * offsets.length)] || (ans + Math.floor(Math.random()*10) - 5);
-    if (w !== ans && w !== 0) wrongs.add(w);
-  }
-  const opts = [...wrongs, ans].sort(() => Math.random() - 0.5);
-
-  gc.innerHTML = `
-    <p class="game-instruction">Resuelve lo más rápido que puedas</p>
-    <div class="math-problem"><span>${a}</span> <span class="math-op">${op}</span> <span>${b}</span> <span style="color:var(--text2)">=</span> <span style="color:var(--cyan)">?</span></div>
-    <div class="math-opts">
-      ${opts.map(o => `<button class="math-opt" onclick="checkMental(this,${o},${ans})">${o}</button>`).join('')}
-    </div>
-    <div id="mental-fb" style="margin-top:16px;min-height:40px;text-align:center;width:100%"></div>`;
-}
-
-function checkMental(btn, val, ans) {
-  document.querySelectorAll('.math-opt').forEach(b => b.disabled = true);
-  const ok = val === ans;
-  btn.classList.add(ok ? 'correct' : 'wrong');
-  if (!ok) document.querySelectorAll('.math-opt').forEach(b => { if (parseInt(b.textContent) === ans) b.classList.add('correct'); });
-  if (ok) { gScore += 10 + Math.floor(gRound / 3); gStreak++; } else gStreak = 0;
-  gRound++; updateGameStats();
-  document.getElementById('mental-fb').innerHTML = ok
-    ? `<span class="feedback-msg feedback-ok" style="display:inline-flex">¡Rápido! +${10 + Math.floor((gRound-1) / 3)} pts</span>`
-    : `<span class="feedback-msg feedback-err" style="display:inline-flex">Era ${ans}</span>`;
-  gTimer = setTimeout(() => renderGame(), 1200);
+function checkMental(btn,val,ans){
+  document.querySelectorAll('.math-opt').forEach(b=>b.disabled=true);
+  const ok=val===ans; btn.classList.add(ok?'correct':'wrong');
+  if(!ok) document.querySelectorAll('.math-opt').forEach(b=>{if(parseInt(b.textContent)===ans)b.classList.add('correct');});
+  if(ok){gScore+=10+Math.floor(gRound/3);gStreak++;}else gStreak=0;
+  gRound++; updateGStats();
+  document.getElementById('mental-fb').innerHTML=ok?`<span class="feedback-msg feedback-ok">¡Rápido! +${10+Math.floor((gRound-1)/3)} pts</span>`:`<span class="feedback-msg feedback-err">Era ${ans}</span>`;
+  gTimer=setTimeout(()=>renderGame(),1200);
 }
 </script>
 </body>
 </html>
-HTMLEOF
-echo "Done. File size: $(wc -c < /mnt/user-data/outputs/icfes_prep.html) bytes"
