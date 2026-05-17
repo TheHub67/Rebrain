@@ -475,9 +475,9 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 24px;height:64px;d
 </div>
 
 <script>
-// ===== GEMINI API KEY =====
-const GEMINI_KEY = 'AIzaSyBav6HNAGEzIDr8s6M6duBqhLIh1XW9PwY';
-const GEMINI_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=' + GEMINI_KEY;
+// ===== CLAUDE API KEY =====
+const CLAUDE_KEY = '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';
+const CLAUDE_URL = 'https://api.anthropic.com/v1/messages';
 
 // ===== STATE =====
 const cfg = { materia: 'Matemáticas', cantidad: '10', nivel: 'intermedio' };
@@ -533,12 +533,18 @@ Responde ÚNICAMENTE con un JSON array válido sin texto extra ni bloques markdo
 - "explicacion": string breve explicando por qué es correcta`;
 
   try {
-    const res = await fetch(GEMINI_URL, {
+    const res = await fetch(CLAUDE_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': CLAUDE_KEY,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
       body: JSON.stringify({
-        contents: [{ parts: [{ text: prompt }] }],
-        generationConfig: { temperature: 0.8, maxOutputTokens: 8000 }
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 8000,
+        messages: [{ role: 'user', content: prompt }]
       })
     });
 
@@ -548,7 +554,7 @@ Responde ÚNICAMENTE con un JSON array válido sin texto extra ni bloques markdo
     }
 
     const data = await res.json();
-    let txt = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+    let txt = data.content?.[0]?.text || '';
     txt = txt.replace(/```json\s*/g,'').replace(/```\s*/g,'').trim();
     const start = txt.indexOf('['), end = txt.lastIndexOf(']');
     if (start !== -1 && end !== -1) txt = txt.slice(start, end + 1);
