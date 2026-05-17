@@ -475,13 +475,154 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 24px;height:64px;d
 </div>
 
 <script>
-// ===== API CONFIG =====
-const _a = 'AIzaSyCr5h';
-const _b = '9ku03MVlvc';
-const _c = 'aqEvVl7vHO';
-const _d = 'f5ZYYg4A4';
-const CLAUDE_KEY = _a+_b+_c+_d;
-const CLAUDE_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key='+CLAUDE_KEY;
+// ===== BANCO DE PREGUNTAS ICFES =====
+const BANCO = {
+  'Matemáticas': [
+    {pregunta:'¿Cuál es el resultado de (2³ × 3²) ÷ 6?', opciones:['12','6','18','9'], correcta:0, explicacion:'2³=8, 3²=9, 8×9=72, 72÷6=12'},
+    {pregunta:'Si f(x) = 2x² - 3x + 1, ¿cuánto es f(2)?', opciones:['3','5','7','1'], correcta:0, explicacion:'f(2)=2(4)-3(2)+1=8-6+1=3'},
+    {pregunta:'¿Cuál es la pendiente de la recta 3x - 2y = 6?', opciones:['3/2','2/3','-3/2','3'], correcta:0, explicacion:'Despejando y: y=(3x-6)/2, pendiente=3/2'},
+    {pregunta:'Un triángulo tiene ángulos de 40° y 75°. ¿Cuánto mide el tercer ángulo?', opciones:['65°','70°','75°','60°'], correcta:0, explicacion:'La suma de ángulos de un triángulo es 180°. 180-40-75=65°'},
+    {pregunta:'¿Cuánto es el 35% de 240?', opciones:['84','72','96','60'], correcta:0, explicacion:'240 × 0.35 = 84'},
+    {pregunta:'Si x² - 5x + 6 = 0, ¿cuáles son los valores de x?', opciones:['2 y 3','1 y 6','-2 y -3','4 y 1'], correcta:0, explicacion:'(x-2)(x-3)=0, entonces x=2 o x=3'},
+    {pregunta:'¿Cuál es el área de un círculo con radio 5 cm?', opciones:['25π cm²','10π cm²','5π cm²','50π cm²'], correcta:0, explicacion:'A=πr²=π(5)²=25π cm²'},
+    {pregunta:'¿Cuánto es log₁₀(1000)?', opciones:['3','2','4','10'], correcta:0, explicacion:'log₁₀(1000)=log₁₀(10³)=3'},
+    {pregunta:'En una secuencia 2, 6, 18, 54... ¿cuál es el siguiente término?', opciones:['162','108','216','72'], correcta:0, explicacion:'Razón de la progresión geométrica es 3. 54×3=162'},
+    {pregunta:'¿Cuál es el MCD de 48 y 36?', opciones:['12','6','9','24'], correcta:0, explicacion:'Factorizando: 48=2⁴×3, 36=2²×3². MCD=2²×3=12'},
+    {pregunta:'Si un rectángulo tiene perímetro 36 cm y largo 10 cm, ¿cuál es su área?', opciones:['80 cm²','60 cm²','100 cm²','72 cm²'], correcta:0, explicacion:'Ancho=(36-20)/2=8. Área=10×8=80 cm²'},
+    {pregunta:'¿Cuánto es sen(30°)?', opciones:['1/2','√2/2','√3/2','1'], correcta:0, explicacion:'sen(30°)=1/2, es un valor trigonométrico fundamental'},
+    {pregunta:'¿Cuál es la solución de 2x + 7 = 15?', opciones:['4','3','5','6'], correcta:0, explicacion:'2x=15-7=8, x=4'},
+    {pregunta:'¿Cuántas diagonales tiene un hexágono?', opciones:['9','6','12','8'], correcta:0, explicacion:'Diagonales=n(n-3)/2=6(3)/2=9'},
+    {pregunta:'Si el radio de una esfera es 3 cm, ¿cuál es su volumen?', opciones:['36π cm³','27π cm³','18π cm³','12π cm³'], correcta:0, explicacion:'V=(4/3)πr³=(4/3)π(27)=36π cm³'},
+    {pregunta:'¿Cuál es el valor de 5! (factorial de 5)?', opciones:['120','60','24','100'], correcta:0, explicacion:'5!=5×4×3×2×1=120'},
+    {pregunta:'Si 3x - 5 > 10, ¿cuál es la solución?', opciones:['x > 5','x > 3','x < 5','x > 15'], correcta:0, explicacion:'3x > 15, x > 5'},
+    {pregunta:'¿Cuál es la distancia entre los puntos (1,2) y (4,6)?', opciones:['5','4','6','3'], correcta:0, explicacion:'d=√((4-1)²+(6-2)²)=√(9+16)=√25=5'},
+    {pregunta:'¿Cuánto es 2⁻³?', opciones:['1/8','1/6','1/4','8'], correcta:0, explicacion:'2⁻³=1/2³=1/8'},
+    {pregunta:'Un tren viaja a 80 km/h. ¿Cuánto tarda en recorrer 200 km?', opciones:['2.5 h','2 h','3 h','2.25 h'], correcta:0, explicacion:'t=d/v=200/80=2.5 horas'},
+    {pregunta:'¿Cuál es el resultado de (x+3)(x-3)?', opciones:['x²-9','x²+9','x²-6x+9','x²+6x-9'], correcta:0, explicacion:'Diferencia de cuadrados: (a+b)(a-b)=a²-b²=x²-9'},
+    {pregunta:'¿Cuánto es la raíz cuadrada de 144?', opciones:['12','11','13','14'], correcta:0, explicacion:'√144=12 porque 12²=144'},
+    {pregunta:'Si hay 52 cartas en un mazo, ¿cuál es la probabilidad de sacar un as?', opciones:['1/13','1/52','4/52','1/4'], correcta:0, explicacion:'Hay 4 ases en 52 cartas: 4/52=1/13'},
+    {pregunta:'¿Cuánto es el promedio de 15, 18, 22, 25, 30?', opciones:['22','20','23','21'], correcta:0, explicacion:'(15+18+22+25+30)/5=110/5=22'},
+    {pregunta:'¿Cuál es la forma factorizada de x² + 7x + 12?', opciones:['(x+3)(x+4)','(x+2)(x+6)','(x+1)(x+12)','(x+6)(x+2)'], correcta:0, explicacion:'Se buscan dos números que sumen 7 y multipliquen 12: 3 y 4'},
+  ],
+  'Lectura Crítica': [
+    {pregunta:'Según la teoría literaria, ¿qué es el "narrador omnisciente"?', opciones:['El que conoce todos los pensamientos y acciones de los personajes','El que solo narra lo que ve','El personaje principal','El autor del texto'], correcta:0, explicacion:'El narrador omnisciente tiene conocimiento total de la historia y los personajes'},
+    {pregunta:'¿Qué figura retórica se usa en "el tiempo es oro"?', opciones:['Metáfora','Símil','Hipérbole','Personificación'], correcta:0, explicacion:'Es una metáfora porque compara directamente el tiempo con el oro sin usar "como"'},
+    {pregunta:'¿Qué es la "ironía" en un texto literario?', opciones:['Decir lo contrario de lo que se piensa','Exagerar la realidad','Comparar dos elementos','Dar vida a objetos inanimados'], correcta:0, explicacion:'La ironía expresa lo contrario de lo que realmente se quiere decir'},
+    {pregunta:'En un texto argumentativo, ¿qué función tiene la tesis?', opciones:['Presentar la posición del autor','Dar ejemplos','Concluir el texto','Narrar hechos'], correcta:0, explicacion:'La tesis es la idea principal que el autor defiende en el texto argumentativo'},
+    {pregunta:'¿Cuál es la diferencia entre un texto expositivo y uno argumentativo?', opciones:['El expositivo informa, el argumentativo convence','El expositivo convence, el argumentativo informa','Son iguales','El expositivo es más largo'], correcta:0, explicacion:'El texto expositivo presenta información objetiva mientras el argumentativo busca persuadir'},
+    {pregunta:'¿Qué es la "coherencia" en un texto?', opciones:['Relación lógica entre las ideas','Uso correcto de signos de puntuación','Rima en los versos','Extensión del texto'], correcta:0, explicacion:'La coherencia es la conexión lógica y temática entre todas las ideas del texto'},
+    {pregunta:'¿Qué figura literaria es "sus dientes son perlas"?', opciones:['Metáfora','Hipérbole','Anáfora','Metonimia'], correcta:0, explicacion:'Es una metáfora que compara los dientes con perlas directamente'},
+    {pregunta:'¿Qué es la "intertextualidad"?', opciones:['Relación entre diferentes textos','Tipo de narrador','Estructura del poema','Tipo de rima'], correcta:0, explicacion:'La intertextualidad es la relación que un texto establece con otros textos'},
+    {pregunta:'¿Cuál es la función del conector "sin embargo"?', opciones:['Contraste','Adición','Causa','Consecuencia'], correcta:0, explicacion:'"Sin embargo" introduce una idea que contrasta con la anterior'},
+    {pregunta:'¿Qué es el "tema" de un texto?', opciones:['El asunto central del que trata','El primer párrafo','La conclusión','El título'], correcta:0, explicacion:'El tema es la idea central o asunto principal sobre el que gira el texto'},
+    {pregunta:'¿Qué tipo de texto es una noticia periodística?', opciones:['Informativo','Literario','Argumentativo','Instruccional'], correcta:0, explicacion:'La noticia tiene como función principal informar sobre hechos reales de actualidad'},
+    {pregunta:'¿Qué es la "sinonimia"?', opciones:['Palabras con significado similar','Palabras con sonido similar','Palabras opuestas','Palabras de la misma familia'], correcta:0, explicacion:'Los sinónimos son palabras distintas que tienen un significado igual o muy parecido'},
+    {pregunta:'¿Cuál es la estructura básica de un cuento?', opciones:['Inicio, nudo y desenlace','Introducción, desarrollo y conclusión','Tesis, argumentos y conclusión','Planteamiento y solución'], correcta:0, explicacion:'El cuento se estructura en inicio (presentación), nudo (conflicto) y desenlace (solución)'},
+    {pregunta:'¿Qué es una "antítesis"?', opciones:['Contraposición de ideas opuestas','Repetición de palabras','Exageración','Comparación'], correcta:0, explicacion:'La antítesis es una figura que contrapone dos ideas o conceptos contrarios'},
+    {pregunta:'¿Qué significa "denotar" en lingüística?', opciones:['Significado literal de una palabra','Significado emocional','Significado implícito','Significado cultural'], correcta:0, explicacion:'La denotación es el significado objetivo y directo que aparece en el diccionario'},
+    {pregunta:'¿Qué es el "monólogo interior"?', opciones:['Técnica narrativa que muestra los pensamientos del personaje','Diálogo entre dos personajes','Descripción del ambiente','Narración en tercera persona'], correcta:0, explicacion:'El monólogo interior revela los pensamientos y sentimientos más profundos del personaje'},
+    {pregunta:'¿Cuál es la función de las comillas en un texto?', opciones:['Citar palabras textuales o indicar uso especial','Separar oraciones','Indicar enumeración','Reemplazar el punto'], correcta:0, explicacion:'Las comillas se usan para citar textualmente o destacar palabras con uso especial'},
+    {pregunta:'¿Qué es la "hipérbole"?', opciones:['Exageración con fines expresivos','Comparación directa','Contradicción aparente','Repetición de sonidos'], correcta:0, explicacion:'La hipérbole exagera la realidad para enfatizar o dar más expresividad al mensaje'},
+    {pregunta:'¿Qué tipo de narrador usa "yo" para contar la historia?', opciones:['Narrador en primera persona','Narrador omnisciente','Narrador testigo','Narrador en tercera persona'], correcta:0, explicacion:'El narrador en primera persona es un personaje de la historia y usa "yo"'},
+    {pregunta:'¿Qué es un "párrafo argumentativo"?', opciones:['El que presenta una idea y la defiende con razones','El que solo describe','El que narra eventos','El que da instrucciones'], correcta:0, explicacion:'El párrafo argumentativo expone una idea o posición y la sustenta con argumentos'},
+    {pregunta:'¿Qué es la "cohesión" textual?', opciones:['Mecanismos gramaticales que conectan las oraciones','Relación temática entre párrafos','Claridad de las ideas','Tipo de estructura narrativa'], correcta:0, explicacion:'La cohesión son los recursos gramaticales (conectores, pronombres) que unen las oraciones'},
+    {pregunta:'¿Qué figura literaria es "el viento susurra secretos"?', opciones:['Personificación','Metáfora','Hipérbole','Símil'], correcta:0, explicacion:'La personificación atribuye características humanas a seres no humanos, como el viento'},
+    {pregunta:'¿Cuál es la intención comunicativa de un texto publicitario?', opciones:['Persuadir para comprar o actuar','Solo informar','Entretener','Enseñar'], correcta:0, explicacion:'El texto publicitario busca convencer al receptor para que adquiera un producto o servicio'},
+    {pregunta:'¿Qué es el "contexto" en la comprensión lectora?', opciones:['Circunstancias que rodean al texto','Solo el tema del texto','El autor del texto','La extensión del texto'], correcta:0, explicacion:'El contexto incluye las circunstancias históricas, culturales y situacionales del texto'},
+    {pregunta:'¿Cuál es la diferencia entre "connotar" y "denotar"?', opciones:['Connotar es significado subjetivo, denotar es objetivo','Son sinónimos','Connotar es objetivo, denotar es subjetivo','No hay diferencia'], correcta:0, explicacion:'La denotación es el significado directo y la connotación es el significado emotivo o cultural'},
+  ],
+  'Ciencias Naturales': [
+    {pregunta:'¿Cuál es la función principal de los cloroplastos?', opciones:['Realizar la fotosíntesis','Producir energía por respiración','Sintetizar proteínas','Almacenar agua'], correcta:0, explicacion:'Los cloroplastos contienen clorofila y son el sitio donde ocurre la fotosíntesis'},
+    {pregunta:'¿Qué partículas se encuentran en el núcleo atómico?', opciones:['Protones y neutrones','Electrones y protones','Solo electrones','Protones y electrones'], correcta:0, explicacion:'El núcleo atómico contiene protones (carga positiva) y neutrones (sin carga)'},
+    {pregunta:'¿Cuál es la segunda ley de Newton?', opciones:['F = ma','F = mv','E = mc²','P = mv'], correcta:0, explicacion:'La segunda ley de Newton establece que la fuerza es igual a la masa por la aceleración'},
+    {pregunta:'¿Qué tipo de enlace forma el agua (H₂O)?', opciones:['Covalente polar','Iónico','Metálico','Covalente apolar'], correcta:0, explicacion:'El agua tiene enlaces covalentes polares debido a la diferencia de electronegatividad'},
+    {pregunta:'¿Cuál es el proceso por el que las plantas producen su alimento?', opciones:['Fotosíntesis','Respiración celular','Fermentación','Digestión'], correcta:0, explicacion:'En la fotosíntesis, las plantas usan luz solar, CO₂ y agua para producir glucosa y O₂'},
+    {pregunta:'¿Qué es el ADN?', opciones:['Molécula que contiene la información genética','Tipo de proteína','Orgánulo celular','Tipo de lípido'], correcta:0, explicacion:'El ADN es la molécula que porta la información genética de todos los seres vivos'},
+    {pregunta:'¿Cuál es la unidad básica de la vida?', opciones:['La célula','El átomo','El tejido','El órgano'], correcta:0, explicacion:'La célula es la unidad estructural y funcional más pequeña de todos los seres vivos'},
+    {pregunta:'¿Qué es la gravedad?', opciones:['Fuerza de atracción entre masas','Fuerza de repulsión','Tipo de energía','Tipo de ondas'], correcta:0, explicacion:'La gravedad es la fuerza de atracción que existe entre dos cuerpos con masa'},
+    {pregunta:'¿Cuál es la fórmula de la glucosa?', opciones:['C₆H₁₂O₆','C₂H₅OH','H₂SO₄','NaCl'], correcta:0, explicacion:'La glucosa es C₆H₁₂O₆, un carbohidrato simple fuente principal de energía celular'},
+    {pregunta:'¿Qué es la mitosis?', opciones:['División celular que produce células idénticas','División celular que produce gametos','Proceso de fotosíntesis','Tipo de respiración'], correcta:0, explicacion:'La mitosis es la división celular que produce dos células hijas genéticamente idénticas'},
+    {pregunta:'¿Cuál es la velocidad de la luz en el vacío?', opciones:['300.000 km/s','150.000 km/s','3.000 km/s','30.000 km/s'], correcta:0, explicacion:'La luz viaja a aproximadamente 300.000 km/s (3×10⁸ m/s) en el vacío'},
+    {pregunta:'¿Qué es la homeostasis?', opciones:['Capacidad del organismo de mantener el equilibrio interno','Proceso de reproducción','Tipo de metabolismo','Función del sistema nervioso'], correcta:0, explicacion:'La homeostasis es el conjunto de mecanismos que mantienen el equilibrio interno del organismo'},
+    {pregunta:'¿Cuántos cromosomas tiene una célula humana normal?', opciones:['46','23','44','48'], correcta:0, explicacion:'Las células somáticas humanas tienen 46 cromosomas (23 pares), excepto los gametos'},
+    {pregunta:'¿Qué es un ecosistema?', opciones:['Conjunto de seres vivos y su ambiente','Solo los animales de una zona','Solo las plantas de una zona','El clima de una región'], correcta:0, explicacion:'Un ecosistema es el conjunto de organismos vivos que interactúan entre sí y con su ambiente'},
+    {pregunta:'¿Cuál es la función del sistema circulatorio?', opciones:['Transportar sangre, nutrientes y oxígeno','Filtrar toxinas','Producir hormonas','Realizar la digestión'], correcta:0, explicacion:'El sistema circulatorio transporta sangre, oxígeno, nutrientes y desechos por el cuerpo'},
+    {pregunta:'¿Qué es un gen?', opciones:['Segmento de ADN que codifica una proteína','Tipo de célula','Orgánulo celular','Tipo de tejido'], correcta:0, explicacion:'Un gen es una secuencia específica de ADN que contiene la información para producir una proteína'},
+    {pregunta:'¿Cuál es la ley de conservación de la energía?', opciones:['La energía no se crea ni destruye, solo se transforma','La energía siempre aumenta','La energía puede crearse','La masa y energía son lo mismo'], correcta:0, explicacion:'La energía total de un sistema cerrado permanece constante, solo cambia de forma'},
+    {pregunta:'¿Qué es la selección natural?', opciones:['Proceso evolutivo donde sobreviven los más adaptados','Reproducción artificial','Tipo de mutación','Proceso de especiación'], correcta:0, explicacion:'Darwin propuso que los organismos mejor adaptados al ambiente tienen mayor éxito reproductivo'},
+    {pregunta:'¿Cuál es la diferencia entre ácidos y bases?', opciones:['Los ácidos liberan H⁺ y las bases liberan OH⁻','Los ácidos tienen pH>7 y las bases pH<7','Son iguales','Los ácidos son sólidos y las bases líquidas'], correcta:0, explicacion:'Los ácidos liberan iones H⁺ (pH<7) y las bases liberan iones OH⁻ (pH>7)'},
+    {pregunta:'¿Qué es la membrana celular?', opciones:['Barrera que regula el paso de sustancias a la célula','Orgánulo que produce energía','Núcleo de la célula','Lugar donde ocurre la fotosíntesis'], correcta:0, explicacion:'La membrana celular es una bicapa lipídica que controla qué entra y sale de la célula'},
+    {pregunta:'¿Cuáles son los productos de la fotosíntesis?', opciones:['Glucosa y oxígeno','CO₂ y agua','Solo glucosa','Solo oxígeno'], correcta:0, explicacion:'6CO₂ + 6H₂O + luz → C₆H₁₂O₆ + 6O₂. Los productos son glucosa y oxígeno'},
+    {pregunta:'¿Qué es la cadena alimentaria?', opciones:['Secuencia de quién come a quién en un ecosistema','Tipo de red nerviosa','Sistema digestivo','Proceso metabólico'], correcta:0, explicacion:'La cadena alimentaria muestra la transferencia de energía entre productores y consumidores'},
+    {pregunta:'¿Cuál es la función de los riñones?', opciones:['Filtrar la sangre y eliminar desechos','Producir insulina','Bombear sangre','Absorber nutrientes'], correcta:0, explicacion:'Los riñones filtran la sangre, eliminan desechos y regulan el equilibrio hídrico del cuerpo'},
+    {pregunta:'¿Qué es la meiosis?', opciones:['División celular que produce gametos con la mitad de cromosomas','División celular que produce células idénticas','Proceso de digestión','Tipo de respiración'], correcta:0, explicacion:'La meiosis produce células sexuales (gametos) con 23 cromosomas cada una'},
+    {pregunta:'¿Cuál es la diferencia entre mezcla homogénea y heterogénea?', opciones:['En la homogénea no se distinguen los componentes','En la homogénea sí se distinguen','Son iguales','Depende de la temperatura'], correcta:0, explicacion:'En la mezcla homogénea (solución) los componentes no son visibles a simple vista'},
+  ],
+  'Ciencias Sociales': [
+    {pregunta:'¿En qué año se firmó la Constitución Política de Colombia vigente?', opciones:['1991','1886','1948','2000'], correcta:0, explicacion:'La Constitución Política de Colombia fue promulgada el 4 de julio de 1991'},
+    {pregunta:'¿Quién fue el libertador de Colombia, Venezuela y Ecuador?', opciones:['Simón Bolívar','Francisco de Paula Santander','Antonio Nariño','Jorge Tadeo Lozano'], correcta:0, explicacion:'Simón Bolívar liberó a Colombia, Venezuela, Ecuador, Perú y Bolivia del dominio español'},
+    {pregunta:'¿Cuáles son las tres ramas del poder público en Colombia?', opciones:['Ejecutiva, Legislativa y Judicial','Presidencial, Congresual y Policial','Federal, Estatal y Municipal','Central, Regional y Local'], correcta:0, explicacion:'El Estado colombiano se organiza en tres ramas: Ejecutiva, Legislativa y Judicial'},
+    {pregunta:'¿Qué es el PIB?', opciones:['Valor total de bienes y servicios producidos en un país','Deuda externa de un país','Porcentaje de desempleo','Balanza comercial'], correcta:0, explicacion:'El PIB (Producto Interno Bruto) mide el valor de todos los bienes y servicios producidos en un país'},
+    {pregunta:'¿Cuál fue la causa principal de la Primera Guerra Mundial?', opciones:['El asesinato del Archiduque Francisco Fernando','La invasión de Polonia','La crisis económica','La Revolución Rusa'], correcta:0, explicacion:'El detonante fue el asesinato del Archiduque Francisco Fernando de Austria en Sarajevo en 1914'},
+    {pregunta:'¿Qué es la democracia representativa?', opciones:['Sistema donde los ciudadanos eligen representantes','Sistema donde todos votan directamente','Gobierno de un solo partido','Gobierno militar'], correcta:0, explicacion:'En la democracia representativa los ciudadanos eligen a sus gobernantes mediante el voto'},
+    {pregunta:'¿En qué continente se originó la Revolución Industrial?', opciones:['Europa','América','Asia','África'], correcta:0, explicacion:'La Revolución Industrial comenzó en Inglaterra a mediados del siglo XVIII y se expandió por Europa'},
+    {pregunta:'¿Qué es la inflación?', opciones:['Aumento generalizado de los precios','Disminución de los precios','Aumento del empleo','Crecimiento económico'], correcta:0, explicacion:'La inflación es el incremento sostenido y generalizado del nivel de precios de bienes y servicios'},
+    {pregunta:'¿Cuál es la capital de Colombia?', opciones:['Bogotá','Medellín','Cali','Barranquilla'], correcta:0, explicacion:'Bogotá D.C. es la capital de la República de Colombia y su ciudad más grande'},
+    {pregunta:'¿Qué fue la Conquista de América?', opciones:['Proceso de colonización europea del continente americano','Guerra entre indígenas','Migración asiática','Proceso de independencia'], correcta:0, explicacion:'La Conquista fue el proceso por el cual las potencias europeas dominaron y colonizaron América'},
+    {pregunta:'¿Cuántos departamentos tiene Colombia?', opciones:['32','30','28','34'], correcta:0, explicacion:'Colombia tiene 32 departamentos más el Distrito Capital de Bogotá'},
+    {pregunta:'¿Qué es el desempleo estructural?', opciones:['Desempleo por cambios en la estructura económica','Desempleo temporal por crisis','Desempleo voluntario','Desempleo estacional'], correcta:0, explicacion:'El desempleo estructural ocurre cuando hay desajuste entre las habilidades y los empleos disponibles'},
+    {pregunta:'¿Quién escribió el Manifiesto Comunista?', opciones:['Marx y Engels','Lenin y Stalin','Rousseau y Voltaire','Smith y Ricardo'], correcta:0, explicacion:'Karl Marx y Friedrich Engels publicaron el Manifiesto Comunista en 1848'},
+    {pregunta:'¿Qué es la ONU?', opciones:['Organización de Naciones Unidas','Organización de Negocios Unificados','Organismo Nacional Unido','Organización de Naciones Unificadas'], correcta:0, explicacion:'La ONU es un organismo internacional fundado en 1945 para mantener la paz y seguridad mundial'},
+    {pregunta:'¿Cuál fue el período de la historia conocido como la "Violencia" en Colombia?', opciones:['1948-1958','1930-1940','1960-1970','1980-1990'], correcta:0, explicacion:'La Violencia fue un conflicto bipartidista entre liberales y conservadores que inició con el Bogotazo en 1948'},
+    {pregunta:'¿Qué es el sufragio universal?', opciones:['Derecho de todos los ciudadanos a votar','Solo hombres votan','Solo adultos con educación votan','Solo propietarios votan'], correcta:0, explicacion:'El sufragio universal garantiza el derecho al voto a todos los ciudadanos sin discriminación'},
+    {pregunta:'¿Qué es la globalización?', opciones:['Proceso de integración económica y cultural mundial','Solo integración económica','Solo integración cultural','Proceso de separación de países'], correcta:0, explicacion:'La globalización es la interdependencia e integración de economías, culturas y sociedades del mundo'},
+    {pregunta:'¿En qué año llegó Cristóbal Colón a América?', opciones:['1492','1498','1500','1488'], correcta:0, explicacion:'Cristóbal Colón llegó a América el 12 de octubre de 1492, aunque creyó haber llegado a Asia'},
+    {pregunta:'¿Cuál es la función del Congreso de Colombia?', opciones:['Hacer las leyes','Aplicar las leyes','Juzgar los delitos','Ejecutar el presupuesto'], correcta:0, explicacion:'El Congreso es la rama Legislativa y su función principal es crear, modificar y derogar leyes'},
+    {pregunta:'¿Qué es el mercantilismo?', opciones:['Doctrina económica que favorece la acumulación de metales preciosos','Sistema económico moderno','Tipo de comercio libre','Sistema de trueque'], correcta:0, explicacion:'El mercantilismo fue la política económica europea del siglo XVI-XVIII basada en acumular oro y plata'},
+    {pregunta:'¿Qué fue la Revolución Francesa?', opciones:['Movimiento que derrocó la monarquía y estableció la república','Revolución industrial en Francia','Guerra entre Francia e Inglaterra','Proceso de colonización francesa'], correcta:0, explicacion:'La Revolución Francesa (1789) acabó con el Antiguo Régimen e instauró principios de libertad e igualdad'},
+    {pregunta:'¿Qué es la soberanía nacional?', opciones:['Poder supremo del Estado sobre su territorio','Dependencia de otros países','Alianza entre naciones','Tipo de gobierno'], correcta:0, explicacion:'La soberanía es la autoridad suprema e independiente que tiene un Estado sobre su territorio y ciudadanos'},
+    {pregunta:'¿Cuál es el río más largo de Colombia?', opciones:['Río Magdalena','Río Cauca','Río Amazonas','Río Orinoco'], correcta:0, explicacion:'El río Magdalena es el principal río de Colombia con 1.528 km de longitud'},
+    {pregunta:'¿Qué es el Estado social de derecho?', opciones:['Estado que garantiza derechos y bienestar a los ciudadanos','Estado sin leyes','Estado militar','Estado teocrático'], correcta:0, explicacion:'Colombia es un Estado social de derecho donde el Estado garantiza los derechos fundamentales de todos'},
+    {pregunta:'¿Cuándo fue la Independencia de Colombia?', opciones:['20 de julio de 1810','7 de agosto de 1819','4 de julio de 1776','15 de septiembre de 1821'], correcta:0, explicacion:'El 20 de julio de 1810 se firmó el Acta de Independencia en Bogotá, aunque la batalla definitiva fue en 1819'},
+  ],
+  'Inglés': [
+    {pregunta:'Which sentence is correct?', opciones:['She doesn't like coffee','She don't like coffee','She not like coffee','She isn't like coffee'], correcta:0, explicacion:'"Doesn't" is used with third person singular (he, she, it) in negative sentences'},
+    {pregunta:'What is the past tense of "go"?', opciones:['Went','Goed','Gone','Goes'], correcta:0, explicacion:'"Go" is an irregular verb. Its simple past tense is "went"'},
+    {pregunta:'Choose the correct option: "I __ studying English for two years"', opciones:['have been','has been','had been','am'], correcta:0, explicacion:'Present perfect continuous uses "have/has been + verb-ing" for ongoing actions'},
+    {pregunta:'What does "although" mean in Spanish?', opciones:['Aunque','Porque','Entonces','Sin embargo'], correcta:0, explicacion:'"Although" is a conjunction that means "aunque" used to show contrast'},
+    {pregunta:'Which word is a synonym for "happy"?', opciones:['Joyful','Sad','Angry','Tired'], correcta:0, explicacion:'"Joyful" means feeling great happiness, making it a synonym for "happy"'},
+    {pregunta:'Complete: "If I __ rich, I would travel the world"', opciones:['were','was','am','will be'], correcta:0, explicacion:'In second conditional, we use "were" for all persons to talk about hypothetical situations'},
+    {pregunta:'What is the plural of "child"?', opciones:['Children','Childs','Childes','Child'], correcta:0, explicacion:'"Child" has an irregular plural: "children". Not formed by adding -s'},
+    {pregunta:'Which sentence uses the passive voice correctly?', opciones:['The book was written by her','She was write the book','The book written by her','Her wrote the book'], correcta:0, explicacion:'Passive voice structure: subject + to be + past participle + by + agent'},
+    {pregunta:'What does "despite" mean?', opciones:['A pesar de','Debido a','Por eso','Sin embargo'], correcta:0, explicacion:'"Despite" is a preposition meaning "a pesar de", used to show contrast'},
+    {pregunta:'Choose the correct question: "__ does she live?"', opciones:['Where','What','Who','When'], correcta:0, explicacion:'"Where" is used to ask about location or place'},
+    {pregunta:'What is the comparative of "good"?', opciones:['Better','Gooder','More good','Best'], correcta:0, explicacion:'"Good" is irregular. Its comparative is "better" and superlative is "best"'},
+    {pregunta:'Which tense is: "They are playing football right now"?', opciones:['Present continuous','Simple present','Present perfect','Past continuous'], correcta:0, explicacion:'Present continuous uses "to be + verb-ing" for actions happening at this moment'},
+    {pregunta:'What does "however" connect?', opciones:['Contrasting ideas','Similar ideas','Causes','Consequences'], correcta:0, explicacion:'"However" is an adverb used to introduce a contrasting or surprising point'},
+    {pregunta:'Choose the correct form: "I wish I __ speak French"', opciones:['could','can','will','would'], correcta:0, explicacion:'After "wish" we use "could" (past of can) to express wishes about abilities'},
+    {pregunta:'What is the meaning of "environment"?', opciones:['Medio ambiente','Entretenimiento','Entorno social','Envío'], correcta:0, explicacion:'"Environment" refers to the natural world, the surroundings and conditions we live in'},
+    {pregunta:'Which word is an adverb?', opciones:['Quickly','Quick','Quickness','Quicker'], correcta:0, explicacion:'"Quickly" is an adverb (modifies verbs). Adverbs often end in -ly'},
+    {pregunta:'Complete: "By 2030, scientists __ a cure for cancer"', opciones:['will have found','will find','have found','found'], correcta:0, explicacion:'Future perfect (will have + past participle) for actions completed before a future time'},
+    {pregunta:'What does "Furthermore" mean?', opciones:['Además','Sin embargo','Por lo tanto','En cambio'], correcta:0, explicacion:'"Furthermore" is used to add more information to a point already made'},
+    {pregunta:'Which sentence is in the past perfect?', opciones:['She had left before he arrived','She has left','She left','She was leaving'], correcta:0, explicacion:'Past perfect uses "had + past participle" for an action before another past action'},
+    {pregunta:'What is the antonym of "ancient"?', opciones:['Modern','Old','Historic','Traditional'], correcta:0, explicacion:'"Ancient" means very old. Its antonym (opposite) is "modern" meaning new or current'},
+    {pregunta:'Choose the correct preposition: "She is interested __ learning languages"', opciones:['in','on','at','for'], correcta:0, explicacion:'The adjective "interested" is always followed by the preposition "in"'},
+    {pregunta:'What does the suffix "-less" mean?', opciones:['Without','Full of','Related to','Against'], correcta:0, explicacion:'The suffix "-less" means "without". Example: homeless = without a home'},
+    {pregunta:'Which is the correct reported speech of "I am tired"?', opciones:['He said he was tired','He said he is tired','He said I am tired','He told I was tired'], correcta:0, explicacion:'In reported speech, present simple changes to past simple and pronouns change accordingly'},
+    {pregunta:'What type of word is "beautiful"?', opciones:['Adjective','Adverb','Noun','Verb'], correcta:0, explicacion:'"Beautiful" describes a noun, so it is an adjective. Adjectives modify nouns'},
+    {pregunta:'Complete: "The more you practice, __ you improve"', opciones:['the more','the most','more','most'], correcta:0, explicacion:'Double comparative structure: "the more... the more..." to show parallel increase'},
+  ]
+};
+
+function getQuestions(materia, cantidad, nivel) {
+  let pool = [...(BANCO[materia] || BANCO['Matemáticas'])];
+  // Mezclar aleatoriamente
+  for (let i = pool.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [pool[i], pool[j]] = [pool[j], pool[i]];
+  }
+  return pool.slice(0, Math.min(parseInt(cantidad), pool.length));
+}
 
 // ===== STATE =====
 const cfg = { materia: 'Matemáticas', cantidad: '10', nivel: 'intermedio' };
@@ -521,29 +662,34 @@ function quickStart(materia, cantidad, nivel) {
 }
 
 // ===== EXAM =====
-async function startExam() {
+function startExam() {
   document.getElementById('exam-config').style.display = 'none';
   document.getElementById('exam-loading').style.display = 'block';
   document.getElementById('exam-question').style.display = 'none';
   document.getElementById('exam-results').style.display = 'none';
   document.getElementById('load-materia').textContent = cfg.materia + ' — ' + cfg.cantidad + ' preguntas';
 
-  const prompt = `Eres un experto en el examen ICFES colombiano. Genera exactamente ${cfg.cantidad} preguntas de ${cfg.materia} de nivel ${cfg.nivel}, estilo ICFES real. Las preguntas deben ser variadas, bien redactadas en español colombiano correcto y desafiantes. Para Inglés las preguntas deben ser en inglés.
-
-Responde ÚNICAMENTE con un JSON array válido sin texto extra ni bloques markdown. Cada objeto debe tener exactamente:
-- "pregunta": string con la pregunta
-- "opciones": array de exactamente 4 strings
-- "correcta": número 0-3 (índice de la opción correcta)
-- "explicacion": string breve explicando por qué es correcta`;
-
-  try {
-    const res = await fetch(CLAUDE_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        contents: [{ parts: [{ text: prompt }] }],
-        generationConfig: { temperature: 0.8, maxOutputTokens: 8000 }
-      })
+  setTimeout(() => {
+    try {
+      questions = getQuestions(cfg.materia, cfg.cantidad, cfg.nivel);
+      if (!questions || questions.length === 0) throw new Error('No hay preguntas disponibles');
+      qIdx = 0; qCorrect = 0; qStreak = 0; qMaxStreak = 0;
+      document.getElementById('exam-loading').style.display = 'none';
+      document.getElementById('exam-question').style.display = 'block';
+      document.getElementById('q-total').textContent = questions.length;
+      const icons = {'Matemáticas':'📐','Lectura Crítica':'📖','Ciencias Naturales':'🔬','Ciencias Sociales':'🌎','Inglés':'🇺🇸'};
+      const colors = {'Matemáticas':'rgba(0,229,255,0.1)','Lectura Crítica':'rgba(255,60,172,0.1)','Ciencias Naturales':'rgba(0,255,135,0.1)','Ciencias Sociales':'rgba(255,184,0,0.1)','Inglés':'rgba(123,97,255,0.1)'};
+      const tcolors = {'Matemáticas':'var(--cyan)','Lectura Crítica':'var(--pink)','Ciencias Naturales':'var(--green)','Ciencias Sociales':'var(--amber)','Inglés':'var(--purple)'};
+      const badge = document.getElementById('q-mat-badge');
+      badge.textContent = (icons[cfg.materia] || '📝') + ' ' + cfg.materia;
+      badge.style.background = colors[cfg.materia] || 'rgba(0,229,255,0.1)';
+      badge.style.color = tcolors[cfg.materia] || 'var(--cyan)';
+      renderQuestion();
+    } catch(e) {
+      document.getElementById('exam-loading').innerHTML = '<div class="loading-state"><div style="font-size:48px;margin-bottom:16px">⚠️</div><div class="loading-title" style="color:var(--red)">Error</div><div class="loading-sub" style="margin-bottom:24px">' + e.message + '</div><button class="btn btn-ghost" onclick="resetExam()">← Volver</button></div>';
+    }
+  }, 800);
+})
     });
 
     if (!res.ok) {
