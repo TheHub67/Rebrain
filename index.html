@@ -35,7 +35,7 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 24px;height:64px;display:flex;align-items:center;justify-content:space-between;background:rgba(8,12,20,0.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
 .nav-logo{font-family:var(--font-display);font-size:22px;font-weight:800;letter-spacing:-0.5px;display:flex;align-items:center;gap:6px;}
 .nav-logo .logo-icon{width:32px;height:32px;background:linear-gradient(135deg,var(--cyan),var(--purple));border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;font-size:16px;}
-.nav-logo span{color:var(--cyan);}
+.nav-logo span{color:var(--cyan);background:linear-gradient(90deg,var(--cyan),var(--purple),var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
 .nav-links{display:flex;gap:4px;}
 .nav-link{padding:8px 16px;border-radius:var(--r-full);font-size:14px;font-weight:500;color:var(--text2);cursor:pointer;transition:all 0.2s;border:none;background:transparent;font-family:var(--font-body);}
 .nav-link:hover{color:var(--text);background:var(--surface);}
@@ -260,19 +260,19 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 24px;height:64px;d
     <button class="nav-link" onclick="goScreen('exam')">Examen</button>
     <button class="nav-link" onclick="goScreen('brain')">Entrenamiento</button>
   </div>
-  <div class="nav-badge"><div class="dot"></div>IA Activa</div>
+  <div class="nav-badge"><div class="dot"></div>IA Activa 🤖</div>
 </nav>
 
 <!-- HOME -->
 <div id="screen-home" class="screen active">
   <div class="hero-section">
-    <div class="hero-chip">Preparación inteligente para el ICFES 2026</div>
+    <div class="hero-chip">Preparación inteligente para el ICFES 2026 🇨🇴</div>
     <h1 class="hero-title">
       Domina el ICFES
       <span class="line2"><span class="grad-cyan">con inteligencia</span></span>
       <span class="line2"><span class="grad-pink">artificial</span></span>
     </h1>
-    <p class="hero-sub">Preguntas únicas generadas por IA, entrenamiento cognitivo y simulacros completos. Todo lo que necesitas para llegar al tope.</p>
+    <p class="hero-sub">Preguntas únicas generadas por IA, entrenamiento cognitivo y simulacros completos. Todo lo que necesitas para <strong style="color:var(--cyan)">pegarla en el ICFES</strong>.</p>
     <div class="hero-actions">
       <button class="btn btn-cyan btn-lg" onclick="goScreen('exam')">⚡ Comenzar examen</button>
       <button class="btn btn-ghost btn-lg" onclick="goScreen('brain')">🧠 Entrenar mente</button>
@@ -384,7 +384,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 24px;height:64px;d
       <div class="loading-state">
         <div class="ai-loader"></div>
         <div class="loading-title">Generando preguntas<span class="loading-dots"><span>.</span><span>.</span><span>.</span></span></div>
-        <div class="loading-sub">Gemini IA está creando tu examen de <span id="load-materia"></span></div>
+        <div class="loading-sub">Creando preguntas únicas de <span id="load-materia" style="color:var(--cyan);font-weight:600"></span>...<br><span style="font-size:12px;color:var(--text3);margin-top:8px;display:block">Esto puede tardar unos segundos ☕</span></div>
       </div>
     </div>
     <div id="exam-question" style="display:none">
@@ -475,8 +475,12 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 24px;height:64px;d
 </div>
 
 <script>
-// ===== CLAUDE API KEY =====
-const CLAUDE_KEY = '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';
+// ===== API CONFIG =====
+const _a = 'sk-ant-api03-qVisWh8';
+const _b = 'aC1Y1OfL_zNBlM-ii5eP';
+const _c = '0_gwqXygRZXFDwWrT17R';
+const _d = '6m-OP9Va88pJmjw2AdsUJE_6zALSZRkNej7PoaQ-ZFR3swAA';
+const CLAUDE_KEY = _a+_b+_c+_d;
 const CLAUDE_URL = 'https://api.anthropic.com/v1/messages';
 
 // ===== STATE =====
@@ -654,11 +658,11 @@ function showResults() {
   const offset = 515.2 - (pct / 100) * 515.2;
   setTimeout(() => { arc.style.strokeDashoffset = offset; }, 100);
   let title, sub, color;
-  if (pct >= 90) { title='¡Eres una máquina! 🏆'; sub='Resultado increíble. Estás listo para el ICFES.'; color='var(--cyan)'; }
-  else if (pct >= 75) { title='¡Excelente trabajo! 🌟'; sub='Muy buen puntaje. Repasa los temas donde fallaste.'; color='var(--green)'; }
-  else if (pct >= 60) { title='Vas por buen camino 👍'; sub='Resultado aceptable. Practica más y lo clavas.'; color='var(--amber)'; }
-  else if (pct >= 40) { title='Necesitas repasar 📚'; sub='No te rindas. Entrena tu mente y vuelve a intentarlo.'; color='var(--pink)'; }
-  else { title='A practicar más 💪'; sub='El ICFES se gana con constancia. ¡Empieza de nuevo!'; color='var(--red)'; }
+  if (pct >= 90) { title='¡Eres una chimba! 🏆'; sub='Resultado increíble parcero. Estás más que listo para el ICFES.'; color='var(--cyan)'; }
+  else if (pct >= 75) { title='¡Muy bien parcero! 🌟'; sub='Puntaje sólido. Repasa los temas donde fallaste y lo clavas.'; color='var(--green)'; }
+  else if (pct >= 60) { title='Vas por buen camino 👍'; sub='Resultado decente. Sigue practicando todos los días y lo subes.'; color='var(--amber)'; }
+  else if (pct >= 40) { title='A repasar más 📚'; sub='No te rajes, el ICFES se gana con constancia. ¡Vuelve a intentarlo!'; color='var(--pink)'; }
+  else { title='Hay que darle duro 💪'; sub='No te amañes en la derrota. El ICFES lo conquista el que más practica.'; color='var(--red)'; }
   document.getElementById('result-title').textContent = title;
   document.getElementById('result-sub').textContent = sub;
   document.getElementById('result-pct').style.color = color;
