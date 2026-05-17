@@ -274,7 +274,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 24px;height:64px;d
     </h1>
     <p class="hero-sub">Preguntas únicas generadas por IA, entrenamiento cognitivo y simulacros completos. Todo lo que necesitas para <strong style="color:var(--cyan)">pegarla en el ICFES</strong>.</p>
     <div class="hero-actions">
-      <button class="btn btn-cyan btn-lg" onclick="goScreen('exam')">⚡ Comenzar examen</button>
+      <button class="btn btn-cyan btn-lg" onclick="goScreen('exam')">⚡ Iniciar examen ahora</button>
       <button class="btn btn-ghost btn-lg" onclick="goScreen('brain')">🧠 Entrenar mente</button>
     </div>
     <div class="stats-row">
@@ -409,7 +409,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 24px;height:64px;d
         </div>
       </div>
       <div class="q-footer">
-        <div style="font-size:13px;color:var(--text3)">Selecciona la opción correcta</div>
+        <div style="font-size:13px;color:var(--text3)">💡 Lee bien antes de responder</div>
         <button class="btn btn-cyan" id="next-btn" onclick="nextQuestion()" style="display:none">Siguiente →</button>
       </div>
     </div>
@@ -450,7 +450,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 24px;height:64px;d
       <div style="margin-bottom:32px;">
         <button class="back-link" onclick="goScreen('home')">← Volver</button>
         <div style="font-family:var(--font-display);font-size:28px;font-weight:800;margin-top:20px;letter-spacing:-0.5px">Entrenamiento mental 🧠</div>
-        <div style="font-size:15px;color:var(--text2);margin-top:8px;line-height:1.6">Ejercicios para mejorar tu rendimiento cognitivo en el ICFES</div>
+        <div style="font-size:15px;color:var(--text2);margin-top:8px;line-height:1.6">Ejercicios científicos para mejorar memoria, lógica y concentración 🧠</div>
       </div>
       <div class="brain-cards" style="grid-template-columns:repeat(auto-fit,minmax(200px,1fr))">
         <div class="brain-card" onclick="startGame('memoria')"><span class="brain-icon">🟦</span><div class="brain-name">Memoria Visual</div><div class="brain-desc">Entrena la memoria de trabajo. Fundamental para lectura crítica y matemáticas.</div><span class="brain-diff level-med">Nivel medio</span></div>
@@ -476,10 +476,10 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 24px;height:64px;d
 
 <script>
 // ===== API CONFIG =====
-const _a = 'AIzaSyDeWB';
-const _b = 'V-kwWtiSUo';
-const _c = 'RDB3TO12m1';
-const _d = '6vF5KIyHM';
+const _a = 'AIzaSyCr5h';
+const _b = '9ku03IMVlv';
+const _c = 'caqEvVl7vH';
+const _d = 'Of5ZYYg4A4';
 const CLAUDE_KEY = _a+_b+_c+_d;
 const CLAUDE_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key='+CLAUDE_KEY;
 
@@ -526,7 +526,7 @@ async function startExam() {
   document.getElementById('exam-loading').style.display = 'block';
   document.getElementById('exam-question').style.display = 'none';
   document.getElementById('exam-results').style.display = 'none';
-  document.getElementById('load-materia').textContent = cfg.materia;
+  document.getElementById('load-materia').textContent = cfg.materia + ' — ' + cfg.cantidad + ' preguntas';
 
   const prompt = `Eres un experto en el examen ICFES colombiano. Genera exactamente ${cfg.cantidad} preguntas de ${cfg.materia} de nivel ${cfg.nivel}, estilo ICFES real. Las preguntas deben ser variadas, bien redactadas en español colombiano correcto y desafiantes. Para Inglés las preguntas deben ser en inglés.
 
